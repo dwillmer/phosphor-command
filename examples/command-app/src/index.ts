@@ -23,7 +23,36 @@ import Menu = phosphor.widgets.Menu;
 import MenuBar = phosphor.widgets.MenuBar;
 import MenuItem = phosphor.widgets.MenuItem;
 
+import {
+  ICommand, ICommandManager
+} from "../../../lib/index";
 
+
+class Commander implements ICommandManager {
+  constructor() {}
+
+  registerCommand( command: ICommand ): boolean {
+    this._commandMap[ command.name ] = command;
+    this._addToNamespaces( command.name );
+    return true;
+  }
+
+  runCommand( name: string ): void {
+    var command = this._commandMap[name];
+    command.callable();
+  }
+
+  _addToNamespaces( name: string ): void {
+    name.split('.')
+  }
+
+  private _commandMap: any = {};
+  private _namespaces: string[]; // TODO: should be a set, not array;
+
+}
+
+
+var COMM = new Commander();
 
 var dockarea = new DockArea();
 dockarea.tabOverlap = 1;
@@ -36,6 +65,23 @@ var handler = {
     panel.fit();
   }
 }
+
+var newCodePanelCommand = {
+  name: "dock.new.codepanel",
+  callable: () => {
+    var panel = new CodeMirrorTab('Code');
+    dockarea.addWidget( panel, DockMode.Right );
+    dockarea.fit();
+    panel.fit();
+  },
+  short_desc: "Code Panel",
+  long_desc: "Adds a new Dock item with a Codemirror widget.",
+  shortcut: "Ctrl-N",
+  menu_location: ["New", "Code Panel"]
+}
+
+COMM.registerCommand( newCodePanelCommand );
+
 
 
 
@@ -79,15 +125,40 @@ class CodeMirrorTab extends Widget {
 }
 
 
+/**
+ * Command tester
+ *
+ */
+class CommandTesterTab extends Widget {
+  constructor() {
+    super();
+    this._tab = new Tab('Tester');
+    var btn = document.createElement('input');
+    btn.type = 'button';
+    btn.name = 'newCodeButton';
+    btn.value = "New Code Panel";
+    btn.onclick = () => COMM.runCommand('dock.new.codepanel');
+    this.node.appendChild( btn );
+  }
+
+  get tab(): Tab {
+    return this._tab;
+  }
+
+  private _tab: Tab;
+}
+
+
 
 /**
  * Hard-coded menu item, for now.
  */
 var addCodeMirrorItem = new MenuItem({
-  text: "New Code Panel",
-  shortcut: "Ctrl-N"
+  text: "Code Panel",
+  shortcut: "Ctrl+Alt+N"
 });
 connect( addCodeMirrorItem, MenuItem.triggered, handler, handler.newCodePanel );
+
 
 var newItem = new MenuItem({
   text: "New",
@@ -100,9 +171,10 @@ var newItem = new MenuItem({
 function main(): void {
 
 
-
+  var tester = new CommandTesterTab();
   var initial = new CodeMirrorTab('Code');
   dockarea.addWidget(initial);
+  dockarea.addWidget(tester);
   dockarea.fit();
 
   var menubar = new MenuBar([

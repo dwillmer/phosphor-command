@@ -6,3 +6,4 @@ lib
 node_modules
 test/build
 npm-debug.log
+examples/command-app/build
