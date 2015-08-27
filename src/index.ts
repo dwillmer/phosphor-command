@@ -26,7 +26,7 @@
  */
 export
 interface ICommand {
-  /*
+  /**
    * 'name' is the developer id of this specific command.
    * It does not have to be human readable or user-friendly.
    *
