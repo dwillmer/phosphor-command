@@ -56,39 +56,6 @@ interface ICommand {
    * general fuzzy search, to give more relevant terms.
    */
   long_desc?: string;
-
-  /**
-   * An (optional) string denoting the shortcut for this specific command.
-   * In the case of a command to be shown in a menu, this could
-   * be something like 'Ctrl-Shift-T'
-   */
-  shortcut?: string;
-
-  /**
-   * This is a menubar-specific array of strings to denote the location
-   * in the menu hierarchy where this command should be placed.
-   */
-  menu_location?: string[];
-
-  /**
-   * Menu constraints are lists of items which denote the position of
-   * a given menu item in each 1-D list.
-   *
-   * This is slightly more complex than most people expect, as we need
-   * to solve the menu order for any item with child items, so you can
-   * define constraints for any level in the hierarchy.
-   *
-   * For example, if the menu location above was ["New", "Tab", "Code Panel"],
-   * your constraints could be
-   * {
-   *  "Code Panel" : [Before("Console"), After("Word Document")],
-   *  "Tab" : [After("Window")]
-   * }
-   * You should not *have* to implement a constraint for every level in the
-   * location, but that is implementation-specific.
-   *
-   */
-  menu_constraints?: any;
 }
 
 /**
@@ -104,7 +71,6 @@ interface ICommand {
 export
 interface ICommandManager {
   registerCommand( command: ICommand ): boolean;
-
   runCommand( name: string ): void; // TODO : arguments for commands.
 
 }

@@ -1,0 +1,29 @@
+[
+  {
+    "location": ["New", "Code Panel"],
+    "command": "dock.new.codepanel",
+    "shortcut": "Ctrl-N",
+    "short_desc": "Code Panel",
+    "long_desc": "Adds a new Dock item with a Codemirror widget."
+  },
+  {
+    "location": ["New", "Tester Panel"],
+    "command": "dock.new.testerpanel"
+  },
+  {
+    "location": ["New", "Example", "One"],
+    "command": "example.namespace.one"
+  },
+  {
+    "location": ["New", "Example", "Two"],
+    "command": "example.namespace.two"
+  },
+  {
+    "location": ["Edit", "Undo"],
+    "command": "global.edit.undo"
+  },
+  {
+    "location": ["Edit", "Redo"],
+    "command": "global.edit.redo"
+  }
+]

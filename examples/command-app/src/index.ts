@@ -24,11 +24,11 @@ import MenuBar = phosphor.widgets.MenuBar;
 import MenuItem = phosphor.widgets.MenuItem;
 
 import {
-  ICommand, ICommandManager
+  ICommand, ICommandManager, IMenuItem
 } from "../../../lib/index";
 
 
-class Commander implements ICommandManager {
+class CommandRegistry implements ICommandManager {
   constructor() {}
 
   registerCommand( command: ICommand ): boolean {
@@ -52,7 +52,7 @@ class Commander implements ICommandManager {
 }
 
 
-var COMM = new Commander();
+var COMM = new CommandRegistry();
 
 var dockarea = new DockArea();
 dockarea.tabOverlap = 1;
@@ -73,11 +73,7 @@ var newCodePanelCommand = {
     dockarea.addWidget( panel, DockMode.Right );
     dockarea.fit();
     panel.fit();
-  },
-  short_desc: "Code Panel",
-  long_desc: "Adds a new Dock item with a Codemirror widget.",
-  shortcut: "Ctrl-N",
-  menu_location: ["New", "Code Panel"]
+  }
 }
 
 COMM.registerCommand( newCodePanelCommand );
