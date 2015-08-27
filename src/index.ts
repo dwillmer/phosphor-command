@@ -27,7 +27,7 @@
 export
 interface ICommand {
   /**
-   * 'name' is the developer id of this specific command.
+   * 'id' is the developer identifier of this specific command.
    * It does not have to be human readable or user-friendly.
    *
    * This string is namespaced, so you can separate different parts of
@@ -35,27 +35,26 @@ interface ICommand {
    * see fit. This hierarchical naming may be useful for menu generation,
    * or may allow faster searching in a command-pallette-style search.
    */
-  name: string;
+  id: string;
 
   /**
    * The callable/function/closure representing the work to be performed
    * when this command is required.
    */
-  callable: any;
+  handler: any;
 
   /**
-   * An (optional) short description of what this command does.
-   * This could be used to populate the text on the menu item, for example, if
-   * the command is to be used through a UI menu bar.
+   * The main human-readable, user-presentable string to denote the
+   * functionality of this command
    */
-  short_desc?: string;
+  title: string;
 
   /**
-   * An (optional) long description of what this command does.
-   * This could be used in tooltips / command palettes, or just for
-   * general fuzzy search, to give more relevant terms.
+   * A longer description of this string, useful for displaying in the UI
+   * when searching, or for performing searching on itself, for example.
+   *
    */
-  long_desc?: string;
+  description: string;
 }
 
 /**

@@ -33,6 +33,12 @@ interface IMenuItem {
   location: string[];
 
   /**
+   * The command that this menu item would like invoked when called.
+   *
+   */
+  command: string;
+
+  /**
    * An (optional) string denoting the shortcut for this specific command.
    * In the case of a command to be shown in a menu, this could
    * be something like 'Ctrl-Shift-T'
@@ -58,6 +64,12 @@ interface IMenuItem {
    *
    */
   constraints?: any;
+
+  /**
+   * Allows menu items to override the default text from the command to be
+   * shown in the actual menu.
+   */
+  title_override?: any;
 }
 
 

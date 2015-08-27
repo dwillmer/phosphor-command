@@ -7,6 +7,7 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
+import MenuBar = phosphor.widgets.MenuBar;
 import {
   IConstraint
 } from './constraints';
@@ -17,9 +18,7 @@ import {
  *
  */
 class MenuSolver {
-  constructor( private _registry: IMenuManager ) {
-
-  }
+  constructor( private _registry: IMenuManager ) {}
 
   /**
    * We use topsort (topological sorting) to find the order of menu items
@@ -31,7 +30,7 @@ class MenuSolver {
    * complexity.
    *
    */
-  solve( ): void {
+  solve( ): MenuBar {
     var commands = this._registry.allMenuItems();
 
     /**
@@ -44,6 +43,7 @@ class MenuSolver {
     var solver = function(location) {
       var itemsAtLevel = this._getLevel( commands, location );
       var edges = this._formatConstraintsToEdges( itemsAtLevel );
+      var sorted = topsort(edges);
 
 
     }
@@ -80,9 +80,9 @@ class MenuSolver {
     // alphabetically as After all existing items.
     var unconstrained = this._difference( allItems, allConstrained );
     unconstrained.sort();
+    // TODO - make sure first item comes after last existing one.
     edges = edges.concat( this._formatInternalEdges( unconstrained ) );
-
-
+    return edges;
   }
 
   _formatInternalEdges( objs: string[] ): Object[] {
