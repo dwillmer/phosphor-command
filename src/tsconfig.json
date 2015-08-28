@@ -2,7 +2,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "declaration": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noEmitOnError": true,
     "sourceMap": true,
     "module": "commonjs",
@@ -12,6 +12,7 @@
   "files": [
     "index.ts",
     "../node_modules/phosphor/dist/phosphor.d.ts",
+    "../typings/topsort/topsort.d.ts",
     "../typings/es6-promise/es6-promise.d.ts"
   ]
 }

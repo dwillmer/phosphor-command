@@ -7,6 +7,7 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
+import topsort = require('topsort');
 import MenuBar = phosphor.widgets.MenuBar;
 import {
   IConstraint
@@ -31,8 +32,8 @@ class MenuSolver {
    * The constraints form dependencies (Before(y) means directed edge x -> y)
    * and therefore we can use topsort to find a suitable order. We won't use
    * a full DAG topsort; we only solve one level of the menu at a time because
-   * the menu is just a simple tree, and therefore doesn't require the extra
-   * complexity.
+   * the menu is just a simple tree, which we need the results for one branch
+   * at a time.
    *
    */
   solve( ): void { // TODO : should return menubar
@@ -48,7 +49,7 @@ class MenuSolver {
     var solver = function(location: string[]) {
       var itemsAtLevel = this._getLevel( commands, location );
       var edges = this._formatConstraintsToEdges( itemsAtLevel );
-      //var sorted = topsort(edges);
+      var sorted = topsort.topsort<string>(edges);
 
 
     }
@@ -61,8 +62,8 @@ class MenuSolver {
    * edges in the DAG for this tree level.
    *
    */
-  _formatConstraintsToEdges( objs: Object[] ): Object[] {
-    var edges: Object[] = [];
+  _formatConstraintsToEdges( objs: Object[] ): string[][] {
+    var edges: string[][] = [];
     var allItems: string[] = []
     var allConstrained: string[] = [];
 
@@ -94,8 +95,8 @@ class MenuSolver {
    * Given an array of strings (assumed in pre-sorted order), this will return
    * an array of {key: value} pairs denoting the edges [a,b], [b,c], [c,d] etc
    */
-  _formatInternalEdges( objs: string[] ): Object[] {
-    var edges: Object[] = [];
+  _formatInternalEdges( objs: string[] ): string[][] {
+    var edges: string[][] = [];
     for( var i=0; i<objs.length-1; i++ ) {
       edges.push( [objs[i],objs[i+1]] );
     }

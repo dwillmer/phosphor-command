@@ -7,7 +7,8 @@
     "definition" : "lib/phosphor-command.d.ts"
   },
   "dependencies": {
-    "phosphor": "0.3.0"
+    "phosphor": "0.3.0",
+    "topsort": "^0.0.2"
   },
   "devDependencies": {
     "browserify": "^11.0.1",
