@@ -7,6 +7,10 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
+export * from './constraints';
+export * from './menu';
+export * from './menu_solver';
+
 /**
  * The basic details needed for a new command.
  *
@@ -47,14 +51,14 @@ interface ICommand {
    * The main human-readable, user-presentable string to denote the
    * functionality of this command
    */
-  title: string;
+  title?: string;
 
   /**
-   * A longer description of this string, useful for displaying in the UI
+   * A longer description of this command, useful for displaying in the UI
    * when searching, or for performing searching on itself, for example.
    *
    */
-  description: string;
+  description?: string;
 }
 
 /**

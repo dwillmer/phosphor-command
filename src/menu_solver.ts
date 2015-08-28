@@ -12,11 +12,16 @@ import {
   IConstraint
 } from './constraints';
 
+import {
+  IMenuManager, IMenuItem
+} from './menu';
+
 /**
  * A class to solve the relationships between menu items
  * and allow custom menu creation.
  *
  */
+export
 class MenuSolver {
   constructor( private _registry: IMenuManager ) {}
 
@@ -30,7 +35,7 @@ class MenuSolver {
    * complexity.
    *
    */
-  solve( ): MenuBar {
+  solve( ): void { // TODO : should return menubar
     var commands = this._registry.allMenuItems();
 
     /**
@@ -40,10 +45,10 @@ class MenuSolver {
      * I strongly suggest following the functional paradigm as much as
      * possible for this section of code.
      */
-    var solver = function(location) {
+    var solver = function(location: string[]) {
       var itemsAtLevel = this._getLevel( commands, location );
       var edges = this._formatConstraintsToEdges( itemsAtLevel );
-      var sorted = topsort(edges);
+      //var sorted = topsort(edges);
 
 
     }
@@ -61,14 +66,14 @@ class MenuSolver {
     var allItems: string[] = []
     var allConstrained: string[] = [];
 
-    objs.map( function(val) {
+    objs.map( function(val: any) {
       for (var i in val) { // will only loop once, we just don't know the key.
         if( val[i].length ) {
-          val[i].map( (con) => {
-            var res = (<Constraint>con).constrain( i );
+          val[i].map( (con: IConstraint) => {
+            var res = (<IConstraint>con).constrain( i );
             allConstrained.push( res[0], res[1] );
             edges.push( res );
-          }
+          });
         }
         allItems.push( i );
       }
@@ -85,10 +90,14 @@ class MenuSolver {
     return edges;
   }
 
+  /**
+   * Given an array of strings (assumed in pre-sorted order), this will return
+   * an array of {key: value} pairs denoting the edges [a,b], [b,c], [c,d] etc
+   */
   _formatInternalEdges( objs: string[] ): Object[] {
     var edges: Object[] = [];
     for( var i=0; i<objs.length-1; i++ ) {
-      edges.push( [objs[i],objs[i+1] );
+      edges.push( [objs[i],objs[i+1]] );
     }
     return edges;
   }
@@ -102,8 +111,10 @@ class MenuSolver {
   _getLevel( items: IMenuItem[], level: string[] ): Object[] {
     var num = level.length;
     return items.map( function(val) {
-      if( val.location.length > num && val.location.slice(0,num+1) === level ) {
-        return { val.location[num] : val.constraints };
+      if( (val.location.length > num) && (val.location.slice(0,num+1) === level) ) {
+        var key = val.location[num];
+        var res = val.constraints;
+        return { key: res };
       }
     });
   }
@@ -121,7 +132,9 @@ class MenuSolver {
    * This could be templated and pulled out into a generic algo library.
    */
   _unique( items: string[] ): string[] {
-    var unique = (value, index, self) => self.indexOf(value) === index;
+    var unique = (value: string, index: number, self: any) => {
+      return self.indexOf(value) === index;
+    }
     return items.filter(unique);
   }
 

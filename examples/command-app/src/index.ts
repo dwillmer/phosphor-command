@@ -32,18 +32,18 @@ class CommandRegistry implements ICommandManager {
   constructor() {}
 
   registerCommand( command: ICommand ): boolean {
-    this._commandMap[ command.name ] = command;
-    this._addToNamespaces( command.name );
+    this._commandMap[ command.id ] = command;
+    this._addToNamespaces( command.id );
     return true;
   }
 
-  runCommand( name: string ): void {
-    var command = this._commandMap[name];
-    command.callable();
+  runCommand( id: string ): void {
+    var command = this._commandMap[id];
+    command.handler();
   }
 
-  _addToNamespaces( name: string ): void {
-    name.split('.')
+  _addToNamespaces( id: string ): void {
+    id.split('.'); // TODO
   }
 
   private _commandMap: any = {};
@@ -67,8 +67,8 @@ var handler = {
 }
 
 var newCodePanelCommand = {
-  name: "dock.new.codepanel",
-  callable: () => {
+  id: "dock.new.codepanel",
+  handler: () => {
     var panel = new CodeMirrorTab('Code');
     dockarea.addWidget( panel, DockMode.Right );
     dockarea.fit();
