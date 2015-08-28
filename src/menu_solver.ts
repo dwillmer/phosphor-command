@@ -51,7 +51,6 @@ class MenuSolver {
       var edges = this._formatConstraintsToEdges( itemsAtLevel );
       var sorted = topsort.topsort<string>(edges);
 
-
     }
 
   }

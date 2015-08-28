@@ -7,15 +7,15 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
-
 import expect = require('expect.js');
-
 import {
-  MenuSolver, IMenuManager
+  MenuSolver, IMenuManager, IMenuItem
 } from "../../lib/index";
 
 
-class TestManager implements IMenuManager {
+class SimpleTestManager implements IMenuManager {
+  registerMenuItem( item: IMenuItem ): boolean { return true; }
+
   allMenuItems(): any[] {
     return [
       {
@@ -39,8 +39,18 @@ describe('phosphor-command', () => {
 
     describe('MenuSolver', () => {
 
-      describe('')
+      describe('.solve()', () => {
 
+        it('should return a MenuBar with a single item "File"', () => {
+          var manager = new SimpleTestManager();
+          var solver = new MenuSolver( manager );
+          /*var result = solver.solve();
+
+          expect(result.children.length).to.be(1);
+          expect(result.children[0].title).to.be("File");*/
+        })
+
+      }); //describe .solve()
 
     }); // describe MenuSolver
 }) // describe phosphor-command
