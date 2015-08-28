@@ -36,8 +36,8 @@ class MenuSolver {
    * at a time.
    *
    */
-  solve( ): void { // TODO : should return menubar
-    var commands = this._registry.allMenuItems();
+  solve( ): MenuBar { // TODO : should return menubar
+    var allItems = this._registry.allMenuItems();
 
     /**
      * The logic inside solver is written in a very functional style.
@@ -47,12 +47,28 @@ class MenuSolver {
      * possible for this section of code.
      */
     var solver = function(location: string[]) {
-      var itemsAtLevel = this._getLevel( commands, location );
+      var itemsAtLevel = this._getLevel( allItems, location );
       var edges = this._formatConstraintsToEdges( itemsAtLevel );
       var sorted = topsort.topsort<string>(edges);
-
+      return sorted;
     }
 
+    /**
+     * The actual logic for iterating over the items, building the relevant
+     * trees and forming a menu system.
+     *
+     * The very top level of a menu is a MenuBar, which contains menu items.
+     * Below this, everything is a menu item, either with 'text' and 'submenu',
+     * if it's not a leaf node, or 'text' and 'shortcut' if it is a leaf node.
+     * We therefore hard code the top level, and recursively search for the
+     * rest.
+     *
+     */
+     var menubar = new MenuBar();
+     var topLevel = solver([]);
+
+
+     return menubar;
   }
 
   /**

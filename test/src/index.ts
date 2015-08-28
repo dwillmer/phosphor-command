@@ -11,6 +11,7 @@ import expect = require('expect.js');
 import {
   MenuSolver, IMenuManager, IMenuItem
 } from "../../lib/index";
+import MenuBar = phosphor.widgets.MenuBar;
 
 
 class SimpleTestManager implements IMenuManager {
@@ -44,11 +45,11 @@ describe('phosphor-command', () => {
         it('should return a MenuBar with a single item "File"', () => {
           var manager = new SimpleTestManager();
           var solver = new MenuSolver( manager );
-          /*var result = solver.solve();
+          var result = solver.solve();
 
-          expect(result.children.length).to.be(1);
-          expect(result.children[0].title).to.be("File");*/
-        })
+          expect(result.count).to.be(1);
+          expect(result.itemAt(0).text).to.be("File");
+        });
 
       }); //describe .solve()
 
