@@ -7,8 +7,8 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
-import topsort = require('topsort');
 /*import MenuBar = phosphor.widgets.MenuBar;*/
+//import topsort = require('topsort');
 import {
   Widget
 } from 'phosphor-widget';
@@ -52,8 +52,8 @@ class MenuSolver {
     var solver = (location: string[]) => {
       var itemsAtLevel = this._getLevel( allItems, location );
       var edges = this._formatConstraintsToEdges( itemsAtLevel );
-      var sorted = topsort.topsort<string>(edges);
-      return sorted;
+      //var sorted = topsort.topsort<string>(edges);
+      //return sorted;
     }
 
     /**

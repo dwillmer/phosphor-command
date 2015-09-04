@@ -11,7 +11,6 @@
   },
   "files": [
     "../../lib/index.d.ts",
-    "../../node_modules/phosphor/dist/phosphor.d.ts",
     "../../typings/codemirror/codemirror.d.ts",
     "../../typings/es6-promise/es6-promise.d.ts",
     "../../typings/expect.js/expect.js.d.ts",
