@@ -8,7 +8,10 @@
 'use strict';
 
 import topsort = require('topsort');
-import MenuBar = phosphor.widgets.MenuBar;
+/*import MenuBar = phosphor.widgets.MenuBar;*/
+import {
+  Widget
+} from 'phosphor-widget';
 import {
   IConstraint
 } from './constraints';
@@ -36,7 +39,7 @@ class MenuSolver {
    * at a time.
    *
    */
-  solve( ): MenuBar { // TODO : should return menubar
+  solve( ): Widget { // TODO : should return menubar
     var allItems = this._registry.allMenuItems();
 
     /**
@@ -46,7 +49,7 @@ class MenuSolver {
      * I strongly suggest following the functional paradigm as much as
      * possible for this section of code.
      */
-    var solver = function(location: string[]) {
+    var solver = (location: string[]) => {
       var itemsAtLevel = this._getLevel( allItems, location );
       var edges = this._formatConstraintsToEdges( itemsAtLevel );
       var sorted = topsort.topsort<string>(edges);
@@ -64,11 +67,12 @@ class MenuSolver {
      * rest.
      *
      */
-     var menubar = new MenuBar();
+     /*var menubar = new Widget(); // TODO : should be MenuBar*/
      var topLevel = solver([]);
 
 
-     return menubar;
+     /*return menubar;*/
+     return new Widget();
   }
 
   /**

@@ -8,10 +8,19 @@
   },
   "dependencies": {
     "phosphor": "0.3.0",
+    "phosphor-widget": "^0.9.0",
+    "phosphor-arrays": "^0.9.0",
+    "phosphor-disposable": "^0.9.0",
+    "phosphor-messaging": "^0.9.0",
+    "phosphor-nodewrapper": "^0.9.0",
+    "phosphor-properties": "^0.9.0",
+    "phosphor-queue": "^0.9.0",
+    "phosphor-signaling": "^0.9.0",
     "topsort": "^0.0.2"
   },
   "devDependencies": {
     "browserify-istanbul": "^0.2.1",
+    "coveralls": "^2.11.4",
     "del": "^0.1.3",
     "dive": "^0.4.0",
     "dts-generator": "^1.5.0",
@@ -33,14 +42,14 @@
     "typescript": "^1.5.3"
   },
   "scripts": {
-    "clean": "rimraf lib && rimraf test/build",
+    "clean": "rimraf lib && rimraf test/build && rimraf test/coverage",
     "build:src": "tsc --project src",
     "build:dts": "node scripts/dtsbundle.js",
     "build:examples": "node scripts/buildexamples.js",
-    "build:test": "tsc --project test/src && browserify test/build/index.js -o test/build/bundle.js",
+    "build:test": "tsc --project test/src",
     "build": "npm run build:src && npm run build:dts && npm run build:test",
     "prepublish": "npm run build",
-    "test": "npm run test:firefox",
+    "test": "mocha test/build/index.js",
     "test:firefox": "karma start --browsers=Firefox test/karma.conf.js",
     "test:chrome": "karma start --browsers=Chrome test/karma.conf.js",
     "test:ie": "karma start --browsers=IE test/karma.conf.js"
