@@ -7,23 +7,46 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
+/**
+ * The interface an object is required to conform to in order to
+ * implement Constraints.
+ *
+ * These are very simple constraints systems which are designed to 
+ * produce Before/After relationships in the form of graph edges
+ * for input into a solver.
+ */
 export
 interface IConstraint {
   constrain( against: string ): string[];
 }
 
+/**
+ * The Before Constraint.
+ *
+ * When constrained against another value (in this case a string),
+ * it returns an array of 2 items with the original value last, thereby
+ * declaring a directed edge from new->original item, forcing the new item
+ * to be sorted 'before' the original.
+ */
 export
 class Before implements IConstraint {
   constructor( private val: string ) {}
   constrain( against: string ): string[] {
-    return [this.val, against];
+    return [against, this.val];
   }
 }
 
+/**
+ * The After Constraint.
+ *
+ * When constrained against another value, it returns an array of 2
+ * items with the original value first, thereby declaring a directed edge
+ * from original->new.
+ */
 export
 class After implements IConstraint {
   constructor( private val: string ) {}
   constrain( against: string ): string[] {
-    return [against, this.val];
+    return [this.val, against];
   }
 }

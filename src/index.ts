@@ -7,73 +7,13 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
+export * from './command_interface';
+export * from './command_manager_interface';
 export * from './constraints';
-export * from './menu';
+export * from './menu_item_interface';
+export * from './menu_manager_interface';
 export * from './menu_solver';
 
-/**
- * The basic details needed for a new command.
- *
- * A 'command' in this context is an action to be performed
- * at a later point in time. We use the same terminology here
- * as WPF and Github's Atom editor. There are no UI items
- * specifically related to a 'command', a 'command' is simply a collection
- * of items which have sufficient knowledge to perform an action
- * at a later time.
- *
- * The UI items are created and used elsewhere in the application -
- * for example, one component may generate the menubar at the top
- * of the application from the registered commands which are (1)
- * in scope, and (2) have menu information present.
- *
- *
- */
-export
-interface ICommand {
-  /**
-   * 'id' is the developer identifier of this specific command.
-   * It does not have to be human readable or user-friendly.
-   *
-   * This string is namespaced, so you can separate different parts of
-   * the name with '.' characters to group the commands however you
-   * see fit. This hierarchical naming may be useful for menu generation,
-   * or may allow faster searching in a command-pallette-style search.
-   */
-  id: string;
 
-  /**
-   * The callable/function/closure representing the work to be performed
-   * when this command is required.
-   */
-  handler: any;
 
-  /**
-   * The main human-readable, user-presentable string to denote the
-   * functionality of this command
-   */
-  title?: string;
 
-  /**
-   * A longer description of this command, useful for displaying in the UI
-   * when searching, or for performing searching on itself, for example.
-   *
-   */
-  description?: string;
-}
-
-/**
- * The command manager stores the existing registered commands, and
- * can present information about the current commands to other parts
- * of the application.
- *
- * Instances of ICommandManager should not deal directly with other levels
- * in the application hierarchy, such as UI items, but should be able to
- * be called to give the current state.
- *
- */
-export
-interface ICommandManager {
-  registerCommand( command: ICommand ): boolean;
-  runCommand( name: string ): void; // TODO : arguments for commands.
-
-}

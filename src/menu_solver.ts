@@ -17,8 +17,11 @@ import {
 } from './constraints';
 
 import {
-  IMenuManager, IMenuItem
-} from './menu';
+  IMenuItem
+} from './menu_item_interface';
+import {
+  IMenuManager
+} from './menu_manager_interface';
 
 /**
  * A class to solve the relationships between menu items
@@ -170,6 +173,5 @@ class MenuSolver {
   _difference( first: string[], second: string[] ): string[] {
     return first.filter( (i) => first.indexOf(i) < 0 );
   }
-
 
 }
