@@ -24,7 +24,7 @@ import MenuBar = phosphor.widgets.MenuBar;
 import MenuItem = phosphor.widgets.MenuItem;
 
 import {
-  ICommand, IMenuItem, CommandManager
+  ICommand, IMenuItem, CommandManager, KeyboardManager
 } from "../../../lib/index";
 
 
@@ -141,6 +141,8 @@ var newItem = new MenuItem({
 
 
 function main(): void {
+
+  var keyManager = new KeyboardManager('mozilla');
 
 
   var tester = new CommandTesterTab();

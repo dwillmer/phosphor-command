@@ -14,24 +14,30 @@ import {
   IKeyPerm
 } from './key_perm_interface';
 
+var MOZILLA_MODIFIERS = { '; :': 59, '= +': 61, '- _': 173, 'meta': 224, 'minus': 173 };
+var IE_MODIFIERS = { '; :': 186, '= +': 187, '- _': 189, 'minus': 189 };
+
 
 /**
  * A simple, concrete implementation of the keyboard manager interface.
  *
- * 
+ * This takes a single argument 'keycodes', which should either be a string
+ * 'mozilla' or 'ie', to represent which browser keycode system should be
+ * used, or alternatively should be an object defining preferred 'keycode'
+ * -> number maps to override the static keycodes defined below.
  *
  */
 export
 class KeyboardManager implements IKeyboardManager {
 
-  private _key_perms: any = {};
-  private _disabled: string[] = [];
-
   /**
    * These have been lifted directly from 
    * https://github.com/jupyter/notebook/blob/master/notebook/static/base/js/keyboard.js#L30
+   *
+   * We potentially have more than one Keyboard Manager in the app, so we 
+   * don't want to store a copy of the keycodes list for each instance.
    */
-  static _keycodes: any = {
+  static keycodes = {
     'a': 65, 'b': 66, 'c': 67, 'd': 68, 'e': 69, 'f': 70, 'g': 71, 'h': 72, 'i': 73,
     'j': 74, 'k': 75, 'l': 76, 'm': 77, 'n': 78, 'o': 79, 'p': 80, 'q': 81, 'r': 82,
     's': 83, 't': 84, 'u': 85, 'v': 86, 'w': 87, 'x': 88, 'y': 89, 'z': 90,
@@ -52,16 +58,35 @@ class KeyboardManager implements IKeyboardManager {
 
   protected _keycode_modifications: any = {};
 
-  constructor() {}
+  private _key_perms: any = {};
+  private _disabled: string[] = [];
+
+
+  constructor(keycodes?: any) {
+
+    if (keycodes === 'mozilla') {
+      this._keycode_modifications = MOZILLA_MODIFIERS;
+    } else if (keycodes === 'ie') {
+      this._keycode_modifications = IE_MODIFIERS;
+    } else if (keycodes !== undefined) {
+      this._keycode_modifications = keycodes;
+    }
+
+    this._bindEvents();
+  }
 
   /**
-   * Registers a key permutation with the keyboard manager
+   * Registers a key permutation with the keyboard manager.
    *
    * This is part of the IKeyboardManager interface.
    *
    */
   registerInput(key: IKeyPerm): boolean {
-
+    if(key.input in this._key_perms) {
+      return false;
+    }
+    this._key_perms[key.input] = key.command;
+    return true;
   }
 
   /**
@@ -70,7 +95,11 @@ class KeyboardManager implements IKeyboardManager {
    * This is part of the IKeyboardManager interface.
    */ 
   enable(key: string): boolean {
-
+    if(key in this._disabled) {
+      delete this._disabled[key];
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -79,7 +108,11 @@ class KeyboardManager implements IKeyboardManager {
    * This is part of the IKeyboardManager interface.
    */
   disable(key: string): boolean {
-
+    if(key in this._key_perms && !(key in this._disabled)) {
+      this._disabled.push(key);
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -88,6 +121,39 @@ class KeyboardManager implements IKeyboardManager {
    * This is part of the IKeyboardManager interface.
    */
   unregister(key: string): boolean {
+    if(key in this._key_perms) {
+      delete this._key_perms[key];
+      if(key in this._disabled) {
+        delete this._disabled[key];
+      }
+      return true;
+    }
+    return false;
+  }
 
+  /**
+   * Returns the numeric keycode from a string representing the key.
+   * 
+   * We want to minimise copies of the keycodes, so the main mapping 'keycodes'
+   * is static, and the modifications usually just reference a global, unless 
+   * there's custom modifications, in which case those are stored per instance.
+   */
+  private _getKeyCode(key: string): number {
+    if(key in this._keycode_modifications) {
+      return this._keycode_modifications[key];
+    } else if(key in KeyboardManager.keycodes) {
+      return KeyboardManager.keycodes[key];
+    }
+  }
+
+  private _bindEvents(): void {
+    document.addEventListener("keydown", function() {
+      console.log('keydown');
+    });
   }
 }
+
+
+
+
+
