@@ -35,6 +35,7 @@ import {
  * - searching by namespace
  * - command arguments / execution scope
  */
+export
 class CommandManager implements ICommandManager {
   constructor() {}
 
@@ -44,9 +45,9 @@ class CommandManager implements ICommandManager {
    * This is part of the ICommandManager interface, it takes any
    * object which implements ICommand.
    */
-  registerCommand( command: ICommand ): boolean {
-    this._commandMap[ command.id ] = command;
-    this._addToNamespaces( command.id );
+  registerCommand(command: ICommand): boolean {
+    this._commandMap[command.id] = command;
+    this._addToNamespaces(command.id);
     return true;
   }
 
@@ -56,12 +57,12 @@ class CommandManager implements ICommandManager {
    * This is part of the ICommandManager interface, it takes a string
    * which represents the full id of a pre-registered command.
    */
-  runCommand( id: string ): void {
+  runCommand(id: string): void {
     var command = this._commandMap[id];
     command.handler();
   }
 
-  _addToNamespaces( id: string ): void {
+  _addToNamespaces(id: string): void {
     id.split('.'); // TODO
   }
 

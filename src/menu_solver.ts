@@ -7,15 +7,13 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
-/*import MenuBar = phosphor.widgets.MenuBar;*/
-//import topsort = require('topsort');
+// import topsort = require('topsort');
 import {
   Widget
 } from 'phosphor-widget';
 import {
   IConstraint
 } from './constraints';
-
 import {
   IMenuItem
 } from './menu_item_interface';

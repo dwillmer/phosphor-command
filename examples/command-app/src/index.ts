@@ -24,35 +24,11 @@ import MenuBar = phosphor.widgets.MenuBar;
 import MenuItem = phosphor.widgets.MenuItem;
 
 import {
-  ICommand, ICommandManager, IMenuItem
+  ICommand, IMenuItem, CommandManager
 } from "../../../lib/index";
 
 
-class CommandRegistry implements ICommandManager {
-  constructor() {}
-
-  registerCommand( command: ICommand ): boolean {
-    this._commandMap[ command.id ] = command;
-    this._addToNamespaces( command.id );
-    return true;
-  }
-
-  runCommand( id: string ): void {
-    var command = this._commandMap[id];
-    command.handler();
-  }
-
-  _addToNamespaces( id: string ): void {
-    id.split('.'); // TODO
-  }
-
-  private _commandMap: any = {};
-  private _namespaces: string[]; // TODO: should be a set, not array;
-
-}
-
-
-var COMM = new CommandRegistry();
+var COMM = new CommandManager();
 
 var dockarea = new DockArea();
 dockarea.tabOverlap = 1;

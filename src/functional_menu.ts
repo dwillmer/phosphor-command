@@ -7,6 +7,14 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
+/**
+ *
+ * DISCLAIMER: this is work-in-progress, a mixture of many ideas,
+ * and should definitely *not* be used.
+ *
+ *
+ */
+
 /*require('../support/lambdajs/utils').expose(global);
 require('../support/lambdajs/lambda').expose();
 require('lenses').expose('global');
