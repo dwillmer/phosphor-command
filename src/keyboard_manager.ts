@@ -13,6 +13,13 @@ import {
 import {
   IKeyPerm
 } from './key_perm_interface';
+import {
+  ICommandInvoker
+} from './command_invoker_interface';
+
+import {
+  Signal, ISignal
+} from 'phosphor-signaling';
 
 var MOZILLA_MODIFIERS = { '; :': 59, '= +': 61, '- _': 173, 'meta': 224, 'minus': 173 };
 var IE_MODIFIERS = { '; :': 186, '= +': 187, '- _': 189, 'minus': 189 };
@@ -28,7 +35,14 @@ var IE_MODIFIERS = { '; :': 186, '= +': 187, '- _': 189, 'minus': 189 };
  *
  */
 export
-class KeyboardManager implements IKeyboardManager {
+class KeyboardManager implements IKeyboardManager, ICommandInvoker {
+
+  /**
+   * A signal used to indicate to other parts of the application that the
+   * critera have been met for a command to be invoked.
+   *
+   */
+  static invokeCommandSignal = new Signal<KeyboardManager, string>();
 
   /**
    * These have been lifted directly from 
@@ -73,6 +87,14 @@ class KeyboardManager implements IKeyboardManager {
     }
 
     this._bindEvents();
+  }
+
+  /**
+   * Getter for the external components to be able to bind to the
+   * signal.
+   */
+  get invokeCommand(): ISignal<KeyboardManager, string> {
+    return KeyboardManager.invokeCommandSignal.bind(this);
   }
 
   /**
@@ -147,8 +169,22 @@ class KeyboardManager implements IKeyboardManager {
   }
 
   private _bindEvents(): void {
-    document.addEventListener("keydown", function() {
-      console.log('keydown');
+    var that = this;
+    document.addEventListener("keydown", function(event: KeyboardEvent) {
+      
+      var key = <number>(event.keyCode);
+      var isCtrl = <boolean>(event.ctrlKey);
+      var ctrlCode = that._getKeyCode('ctrl');
+
+      if( isCtrl ) {
+        switch(key) {
+          case ctrlCode:
+            break;// ignore ctrl key.
+          default:
+            console.log('Invoking command');
+            that.invokeCommand.emit("dock.new.codepanel");
+        }
+      }
     });
   }
 }

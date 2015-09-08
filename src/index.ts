@@ -19,7 +19,7 @@
  *                    -->|_________________|
  *
  * MenuManager - 
- * stores the registered menu items, defined with objects which conform to
+ * stores the registered menu items, which are objects that conform to
  * IMenuItem. This presents the registered menu items to any view components
  * which need the data, eg. the solver in order to build a menu hierarchy.
  *
@@ -32,10 +32,14 @@
  * CommandManager - 
  * stores the id's and handlers for the registered commands, and executes the 
  * handler if requested. 
+ * Commands can either be invoked directly (runCommand) or via a Signal. In the
+ * case of a Signal, the emitting component needs to (1) implement ICommandInvoker
+ * and (2) register with the required CommandManager (registerCommandInvoker).
  * 
  */
 
 export * from './command_interface';
+export * from './command_invoker_interface';
 export * from './command_manager';
 export * from './command_manager_interface';
 export * from './constraints';

@@ -13,6 +13,9 @@ import {
 import {
   ICommand
 } from './command_interface';
+import {
+  ICommandInvoker
+} from './command_invoker_interface';
 
 
 /**
@@ -49,6 +52,21 @@ class CommandManager implements ICommandManager {
     this._commandMap[command.id] = command;
     this._addToNamespaces(command.id);
     return true;
+  }
+
+  /**
+   * Registers a new component which can emit a signal
+   * in order to invoke a command
+   *
+   */
+  registerCommandInvoker(obj: ICommandInvoker): boolean {
+    obj.invokeCommand.connect(this._runFromSignal, this);
+    return true;
+  }
+
+  private _runFromSignal(sender: ICommandInvoker, value: string): void {
+    console.log('Run from signal');
+    this.runCommand(value);
   }
 
   /**

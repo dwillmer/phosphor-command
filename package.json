@@ -15,7 +15,7 @@
     "phosphor-nodewrapper": "^0.9.0",
     "phosphor-properties": "^0.9.0",
     "phosphor-queue": "^0.9.0",
-    "phosphor-signaling": "^0.9.0",
+    "phosphor-signaling": "^1.1.0",
     "topsort": "^0.0.2"
   },
   "devDependencies": {
