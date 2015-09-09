@@ -19,9 +19,6 @@ import DockArea = phosphor.widgets.DockArea;
 import DockMode = phosphor.widgets.DockMode;
 import Tab = phosphor.widgets.Tab;
 import Widget = phosphor.widgets.Widget;
-import Menu = phosphor.widgets.Menu;
-import MenuBar = phosphor.widgets.MenuBar;
-import MenuItem = phosphor.widgets.MenuItem;
 
 import {
   attachWidget
@@ -34,6 +31,12 @@ import {
   ICommand, IMenuItem, CommandManager, KeyboardManager,
   MenuManager, MenuSolver
 } from "../../../lib/index";
+
+import {
+  Menu, MenuItem, MenuBar
+} from 'phosphor-menus';
+
+// import './index.css';
 
 
 var COMM = new CommandManager();
@@ -79,7 +82,6 @@ var newCodePanelCommand = {
     var panel = new CodeMirrorTab('Code');
     dockarea.addWidget(panel, DockMode.Right);
     dockarea.fit();
-    //panel.fit();
   }
 }
 
@@ -163,6 +165,31 @@ class CommandTesterTab extends Widget {
 }
 
 
+//
+// Demo test menu bar
+//
+//
+
+var undoItem = new MenuItem({
+  text: 'Undo'
+});
+var redoItem = new MenuItem({
+  text: 'Redo'
+});
+var editMenu = new Menu();
+editMenu.items = [
+  undoItem,
+  redoItem,
+];
+var editItem = new MenuItem({
+  text: 'Edit',
+  submenu: editMenu
+});
+
+
+
+
+
 
 function main(): void {
 
@@ -182,13 +209,18 @@ function main(): void {
   dockarea.fit();
 
   var solver = new MenuSolver(menuManager);
-  var menubar = solver.solve();
+  // var menubar = solver.solve();
+  var menubar = new MenuBar();
+  menubar.items = [
+    editItem,
+  ];
 
-  attachWidget(menubar, document.getElementById('container'));
-  //menubar.attach( document.getElementById('container') );
+  //attachWidget(menubar, document.getElementById('container'));
+  attachWidget(menubar, document.body);
   dockarea.attach( document.getElementById('main') );
 
   window.onresize = () => dockarea.fit();
+  dockarea.fit();
 }
 
 window.onload = main;

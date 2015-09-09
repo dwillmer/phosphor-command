@@ -49,7 +49,7 @@ var itemTranspose = (item: any) => {
 
 var buildItem = function(item: any) {
   return new MenuItem({
-    text: item[-1],
+    text: item[item.length-1],
     shortcut: item.menuItem.shortcut
   });
 }
@@ -118,6 +118,8 @@ export function partialSolve( items, prefix ): MenuItem[] {
   var menu_items = [];
   var levelItems: string[][] = getItemsAtLevel( items, prefix );
   console.log('got items at level: ' + levelItems.toString());
+
+  // TODO : don't need to sort at every level, can just sort once at the top call
   sortItems( levelItems );
 
   var startIdx = 0;
@@ -138,7 +140,9 @@ export function partialSolve( items, prefix ): MenuItem[] {
     //
     if( levelItems[endIdx].length === preLen+1 ) {
       console.log('first case: ' + levelItems[endIdx].toString());
-      menu_items.push( buildItem( levelItems[endIdx] ) )
+      menu_items.push(buildItem(levelItems[endIdx]));
+      endIdx++;
+      startIdx = endIdx;
     } else {
       console.log('second case: ' + levelItems[endIdx].toString());
       // iterate over all the items at this level in the tree
@@ -149,17 +153,17 @@ export function partialSolve( items, prefix ): MenuItem[] {
         console.log('second while: ' + levelItems[endIdx].toString());
         endIdx++;
       }
-      var subItems = levelItems.slice(startIdx, endIdx + 1).map((val) => {
+      var subItems = levelItems.slice(startIdx, endIdx).map((val) => {
         return (<any>val).menuItem;
       });
       var submenu = partialSolve(subItems, currentVal.slice(0,preLen+1));
       var menu_obj = new Menu();
       menu_obj.items = submenu;
-      // TODO : this slice shouldn't be necessary, just index into currentVal.
-      var item = new MenuItem({text: currentVal.slice(preLen,preLen+2)[0], submenu: menu_obj});
+      var item = new MenuItem({text: currentVal[preLen], submenu: menu_obj});
       menu_items.push( item );
+      startIdx = endIdx;
+      endIdx++;
     }
-    endIdx++;
   }
 
   // var order = topsort.topsort<string>( getConstraints( levelItems ) );
