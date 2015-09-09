@@ -7,15 +7,16 @@
     "definition": "lib/phosphor-command.d.ts"
   },
   "dependencies": {
-    "phosphor": "0.3.0",
-    "phosphor-widget": "^0.9.5",
-    "phosphor-menus": "^0.9.0",
     "phosphor-arrays": "^1.0.3",
     "phosphor-disposable": "^1.0.2",
+    "phosphor-menus": "^0.9.0",
+    "phosphor-messaging": "^1.0.3",
     "phosphor-nodewrapper": "^1.0.2",
     "phosphor-properties": "^1.1.0",
     "phosphor-queue": "^1.0.2",
     "phosphor-signaling": "^1.1.0",
+    "phosphor-tabs": "^0.9.1",
+    "phosphor-widget": "^0.9.5",
     "topsort": "^0.0.2"
   },
   "devDependencies": {
@@ -27,7 +28,7 @@
     "dive": "^0.4.0",
     "dts-generator": "^1.5.0",
     "event-stream": "^3.1.7",
-    "expect.js": "^0.3.1", 
+    "expect.js": "^0.3.1",
     "karma": "^0.13.9",
     "karma-browserify": "^4.3.0",
     "karma-chrome-launcher": "^0.2.0",
