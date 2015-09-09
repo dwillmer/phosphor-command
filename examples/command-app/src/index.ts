@@ -135,7 +135,6 @@ class CommandTesterTab extends Widget {
   constructor() {
     super();
     var tab = new Tab('Tester');
-    tab.closable = true;
     TabPanel.setTab(this, tab);
     var btn = document.createElement('input');
     btn.type = 'button';
