@@ -10,6 +10,12 @@
 import {
   IKeyPerm
 } from './key_perm_interface';
+import {
+  IMenuManager
+} from './menu_manager_interface';
+import {
+  IShortcutAdder
+} from './shortcut_adder_interface';
 
 
 /**
@@ -56,5 +62,10 @@ interface IKeyboardManager {
    * registered under 'key'.
    */
   unregister(key: string): boolean;
+
+  /**
+   * TODO!
+   */
+  registerShortcutAdder(obj: IShortcutAdder): boolean;
 
 }

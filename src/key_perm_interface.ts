@@ -36,9 +36,11 @@ interface IKeyPerm {
    * 
    * #### Examples
    * ```typescript
-   * 'Ctrl+X'
-   * 'Shift+Ctrl+4';
+   * 'Ctrl-X'
+   * 'Shift-Ctrl-4';
    * ```
+   * TODO : convert this to a string array so all joining is only dealt
+   * with inside a single class.
    */
   input: string;
 

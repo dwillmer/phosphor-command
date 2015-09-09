@@ -24,39 +24,76 @@ import MenuBar = phosphor.widgets.MenuBar;
 import MenuItem = phosphor.widgets.MenuItem;
 
 import {
+  attachWidget
+} from 'phosphor-widget';
+import {
   ISignal, Signal
 } from 'phosphor-signaling';
 
 import {
-  ICommand, IMenuItem, CommandManager, KeyboardManager
+  ICommand, IMenuItem, CommandManager, KeyboardManager,
+  MenuManager, MenuSolver
 } from "../../../lib/index";
 
 
 var COMM = new CommandManager();
-
 var dockarea = new DockArea();
 dockarea.tabOverlap = 1;
 
-var handler = {
-  newCodePanel: () => {
-    var panel = new CodeMirrorTab('Code');
-    dockarea.addWidget( panel, DockMode.Right );
-    dockarea.fit();
-    panel.fit();
+
+var MENU = [
+  {
+    "location": ["New", "Code Panel"],
+    "command": "dock.new.codepanel",
+    "shortcut": ["Ctrl", "P"],
+    "short_desc": "Code Panel",
+    "long_desc": "Adds a new Dock item with a Codemirror widget."
+  },
+  {
+    "location": ["New", "Tester Panel"],
+    "command": "dock.new.testerpanel",
+    "shortcut": ["Ctrl", "T"]
+  },
+  {
+    "location": ["New", "Example", "One"],
+    "command": "example.namespace.one"
+  },
+  {
+    "location": ["New", "Example", "Two"],
+    "command": "example.namespace.two"
+  },
+  {
+    "location": ["Edit", "Undo"],
+    "command": "global.edit.undo"
+  },
+  {
+    "location": ["Edit", "Redo"],
+    "command": "global.edit.redo"
   }
-}
+];
+
 
 var newCodePanelCommand = {
   id: "dock.new.codepanel",
   handler: () => {
     var panel = new CodeMirrorTab('Code');
-    dockarea.addWidget( panel, DockMode.Right );
+    dockarea.addWidget(panel, DockMode.Right);
     dockarea.fit();
-    panel.fit();
+    //panel.fit();
   }
 }
 
-COMM.registerCommand( newCodePanelCommand );
+var newTesterPanelCommand = {
+  id: "dock.new.testerpanel",
+  handler: () => {
+    var panel = new CommandTesterTab();
+    dockarea.addWidget(panel, DockMode.Right);
+    dockarea.fit();
+  }
+}
+
+COMM.registerCommand(newCodePanelCommand);
+COMM.registerCommand(newTesterPanelCommand);
 
 
 
@@ -109,6 +146,7 @@ class CommandTesterTab extends Widget {
   constructor() {
     super();
     this._tab = new Tab('Tester');
+    this._tab.closable = true;
     var btn = document.createElement('input');
     btn.type = 'button';
     btn.name = 'newCodeButton';
@@ -126,29 +164,16 @@ class CommandTesterTab extends Widget {
 
 
 
-/**
- * Hard-coded menu item, for now.
- */
-var addCodeMirrorItem = new MenuItem({
-  text: "Code Panel",
-  shortcut: "Ctrl+Alt+N"
-});
-connect( addCodeMirrorItem, MenuItem.triggered, handler, handler.newCodePanel );
-
-
-var newItem = new MenuItem({
-  text: "New",
-  submenu: new Menu([
-    addCodeMirrorItem,
-  ]),
-});
-
-
 function main(): void {
+
+  var menuManager = new MenuManager(MENU);
+  //COMM.registerCommandInvoker(menuManager);
 
   var keyManager = new KeyboardManager('mozilla');
   COMM.registerCommandInvoker(keyManager);
 
+  keyManager.registerShortcutAdder(menuManager);
+  menuManager.registerShortcuts();
 
   var tester = new CommandTesterTab();
   var initial = new CodeMirrorTab('Code');
@@ -156,11 +181,11 @@ function main(): void {
   dockarea.addWidget(tester);
   dockarea.fit();
 
-  var menubar = new MenuBar([
-    newItem
-  ]);
+  var solver = new MenuSolver(menuManager);
+  var menubar = solver.solve();
 
-  menubar.attach( document.getElementById('container') );
+  attachWidget(menubar, document.getElementById('container'));
+  //menubar.attach( document.getElementById('container') );
   dockarea.attach( document.getElementById('main') );
 
   window.onresize = () => dockarea.fit();

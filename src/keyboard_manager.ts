@@ -16,6 +16,12 @@ import {
 import {
   ICommandInvoker
 } from './command_invoker_interface';
+import {
+  IMenuManager
+} from './menu_manager_interface';
+import {
+  IShortcutAdder
+} from './shortcut_adder_interface';
 
 import {
   Signal, ISignal
@@ -70,6 +76,7 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
   //   'insert': 45, 'delete': 46, 'numlock': 144,
   // };
 
+  // TODO : finish off all keycodes below.
   static keycodes = {
     65: 'a', 66: 'b', 67: 'c', 68: 'd', 69: 'e', 70: 'f', 71: 'g', 72: 'h', 73: 'i',
     74: 'j', 75: 'k', 76: 'l', 77: 'm', 78: 'n', 79: 'o', 80: 'p', 81: 'q', 82: 'r',
@@ -86,7 +93,7 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
    */
   protected _keycode_modifications: any = {};
 
-  private _key_perms: any = {'ctrl-p': 'dock.new.codepanel'};
+  private _key_perms: any = {};
   private _disabled: string[] = [];
 
 
@@ -165,6 +172,25 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
       return true;
     }
     return false;
+  }
+
+  /**
+   * TODO : clean this up, it's a bit too specific.
+   * 'shortcut adder' isn't a very good name, could
+   * do with genericising the whole thing.
+   */
+  registerShortcutAdder(obj: IShortcutAdder): boolean {
+    obj.shortcutAdded.connect(this._registerInputFromSignal, this);
+    return true;
+  }
+
+  /**
+   * TODO!
+   *
+   */
+  private _registerInputFromSignal(sender: IShortcutAdder, value: IKeyPerm): void {
+    console.log('Registered: ' + value.toString());
+    this.registerInput(value);
   }
 
   /**

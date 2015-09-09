@@ -10,6 +10,12 @@
 import {
   IMenuItem
 } from './menu_item_interface';
+import {
+  ISignal
+} from 'phosphor-signaling';
+import {
+  MenuManager
+} from './menu_manager';
 
 
 /**

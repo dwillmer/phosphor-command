@@ -20,6 +20,12 @@ import {
 import {
   IMenuManager
 } from './menu_manager_interface';
+import {
+  partialSolve
+} from './functional_menu';
+import {
+  Menu, MenuBar, MenuItem
+} from 'phosphor-menus';
 
 /**
  * A class to solve the relationships between menu items
@@ -40,8 +46,8 @@ class MenuSolver {
    * at a time.
    *
    */
-  solve( ): Widget { // TODO : should return menubar
-    var allItems = this._registry.allMenuItems();
+  solve(): MenuBar { 
+    
 
     /**
      * The logic inside solver is written in a very functional style.
@@ -50,12 +56,12 @@ class MenuSolver {
      * I strongly suggest following the functional paradigm as much as
      * possible for this section of code.
      */
-    var solver = (location: string[]) => {
-      var itemsAtLevel = this._getLevel( allItems, location );
-      var edges = this._formatConstraintsToEdges( itemsAtLevel );
-      //var sorted = topsort.topsort<string>(edges);
-      //return sorted;
-    }
+    // var solver = (location: string[]) => {
+    //   var itemsAtLevel = this._getLevel( allItems, location );
+    //   var edges = this._formatConstraintsToEdges( itemsAtLevel );
+    //   //var sorted = topsort.topsort<string>(edges);
+    //   //return sorted;
+    // }
 
     /**
      * The actual logic for iterating over the items, building the relevant
@@ -68,12 +74,12 @@ class MenuSolver {
      * rest.
      *
      */
-     /*var menubar = new Widget(); // TODO : should be MenuBar*/
-     var topLevel = solver([]);
+     var allItems = this._registry.allMenuItems();
+     var menubar = new MenuBar(); // TODO : should be MenuBar
+     var topLevel = partialSolve(allItems, []);
+     menubar.items = topLevel;
 
-
-     /*return menubar;*/
-     return new Widget();
+     return menubar;
   }
 
   /**

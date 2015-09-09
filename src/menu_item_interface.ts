@@ -44,7 +44,7 @@ interface IMenuItem {
    * In the case of a command to be shown in a menu, this could
    * be something like 'Ctrl-Shift-T'
    */
-  shortcut?: string;
+  shortcut?: string[];
 
   /**
    * Menu constraints are lists of items which denote the position of
