@@ -7,12 +7,50 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
+/**
+ *     ______________
+ *    |              |
+ * -->|  MenuManager |-|------------------------.
+ *    |______________| |                        |  ________________               
+ *                     |                        |-|                |
+ *                     |  _________________       | CommandManager |
+ *                     |-|                 |    |-|________________|
+ *                       | KeyboardManager |----|
+ *                    -->|_________________|
+ *
+ * MenuManager - 
+ * stores the registered menu items, which are objects that conform to
+ * IMenuItem. This presents the registered menu items to any view components
+ * which need the data, eg. the solver in order to build a menu hierarchy.
+ *
+ * KeyboardManager - 
+ * stores the key permutations which result in command handlers being invoked.
+ * this is populated directly, or indirectly via the menu manager. When a menu
+ * shortcut is defined in a registered menu item, the menu manager passes the 
+ * key permutation to the keyboard manager to register it as valid.
+ *
+ * CommandManager - 
+ * stores the id's and handlers for the registered commands, and executes the 
+ * handler if requested. 
+ * Commands can either be invoked directly (runCommand) or via a Signal. In the
+ * case of a Signal, the emitting component needs to (1) implement ICommandInvoker
+ * and (2) register with the required CommandManager (registerCommandInvoker).
+ * 
+ */
+
 export * from './command_interface';
+export * from './command_invoker_interface';
+export * from './command_manager';
 export * from './command_manager_interface';
 export * from './constraints';
+export * from './key_perm_interface';
+export * from './keyboard_manager';
+export * from './keyboard_manager_interface';
 export * from './menu_item_interface';
+export * from './menu_manager';
 export * from './menu_manager_interface';
 export * from './menu_solver';
+export * from './shortcut_adder_interface';
 
 
 

@@ -1,24 +1,18 @@
 /*-----------------------------------------------------------------------------
-| Copyright (c) 2015, PhosphorJS Contributors
+| Copyright (c) 2014-2015, PhosphorJS Contributors
 |
 | Distributed under the terms of the BSD 3-Clause License.
 |
 | The full license is in the file LICENSE, distributed with this software.
 |----------------------------------------------------------------------------*/
-body {
-  margin: 0;
-  padding: 0;
-  background: #f5f6f7;
-}
-#main {
-  position: absolute;
-  overflow: hidden;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  border: 1px solid #ddd;
-}
-.CodeMirrorWidget > .CodeMirror {
-  z-index: 0;
+'use strict';
+
+/**
+ * Formalises the behaviour required for a component to inform other
+ * parts of an application that a new keyboard shortcut is available.
+ *
+ */
+export
+interface IShortcutAdder {
+	shortcutAdded: any
 }

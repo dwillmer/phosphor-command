@@ -15,6 +15,6 @@ dive(
     mkdir('-p', dir + '/build');
     exec("stylus " + dir + "/src/index.styl -o " + dir + "/build");
     exec("tsc --project " + dir);
-    exec("browserify " + dir + "/build/index.js --outfile " + dir + "/build/app.js --debug");
+    exec("browserify " + dir + "/build/index.js --outfile " + dir + "/build/app.js --debug -g browserify-css");
   }
 );

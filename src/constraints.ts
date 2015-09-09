@@ -17,7 +17,7 @@
  */
 export
 interface IConstraint {
-  constrain( against: string ): string[];
+  constrain(against: string): string[];
 }
 
 /**
@@ -30,8 +30,8 @@ interface IConstraint {
  */
 export
 class Before implements IConstraint {
-  constructor( private val: string ) {}
-  constrain( against: string ): string[] {
+  constructor(private val: string) {}
+  constrain(against: string): string[] {
     return [against, this.val];
   }
 }
@@ -45,8 +45,8 @@ class Before implements IConstraint {
  */
 export
 class After implements IConstraint {
-  constructor( private val: string ) {}
-  constrain( against: string ): string[] {
+  constructor(private val: string) {}
+  constrain(against: string): string[] {
     return [this.val, against];
   }
 }

@@ -23,7 +23,6 @@
  * of the application from the registered commands which are (1)
  * in scope, and (2) have menu information present.
  *
- *
  */
 export
 interface ICommand {

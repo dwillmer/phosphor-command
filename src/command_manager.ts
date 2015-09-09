@@ -13,6 +13,9 @@ import {
 import {
   ICommand
 } from './command_interface';
+import {
+  ICommandInvoker
+} from './command_invoker_interface';
 
 
 /**
@@ -35,6 +38,7 @@ import {
  * - searching by namespace
  * - command arguments / execution scope
  */
+export
 class CommandManager implements ICommandManager {
   constructor() {}
 
@@ -44,10 +48,25 @@ class CommandManager implements ICommandManager {
    * This is part of the ICommandManager interface, it takes any
    * object which implements ICommand.
    */
-  registerCommand( command: ICommand ): boolean {
-    this._commandMap[ command.id ] = command;
-    this._addToNamespaces( command.id );
+  registerCommand(command: ICommand): boolean {
+    this._commandMap[command.id] = command;
+    this._addToNamespaces(command.id);
     return true;
+  }
+
+  /**
+   * Registers a new component which can emit a signal
+   * in order to invoke a command
+   *
+   */
+  registerCommandInvoker(obj: ICommandInvoker): boolean {
+    obj.invokeCommand.connect(this._runFromSignal, this);
+    return true;
+  }
+
+  private _runFromSignal(sender: ICommandInvoker, value: string): void {
+    console.log('Run from signal');
+    this.runCommand(value);
   }
 
   /**
@@ -56,12 +75,12 @@ class CommandManager implements ICommandManager {
    * This is part of the ICommandManager interface, it takes a string
    * which represents the full id of a pre-registered command.
    */
-  runCommand( id: string ): void {
+  runCommand(id: string): void {
     var command = this._commandMap[id];
     command.handler();
   }
 
-  _addToNamespaces( id: string ): void {
+  _addToNamespaces(id: string): void {
     id.split('.'); // TODO
   }
 

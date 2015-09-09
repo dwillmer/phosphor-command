@@ -10,6 +10,9 @@
 import {
 	ICommand
 } from './command_interface';
+import {
+	ICommandInvoker
+} from './command_invoker_interface';
 
 
 /**
@@ -34,6 +37,13 @@ interface ICommandManager {
 	 * approach to failure here, rather than just using a boolean.
 	 */
   registerCommand(command: ICommand): boolean;
+
+  /**
+   * Registers a command invoker, which is an object that conforms to the
+   * ICommandInvoker interface.
+   *
+   */
+  registerCommandInvoker(obj: ICommandInvoker): boolean;
   
   /**
    * Runs the handler associated with a command, takes a string.

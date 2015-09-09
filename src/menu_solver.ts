@@ -7,21 +7,25 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
-/*import MenuBar = phosphor.widgets.MenuBar;*/
-//import topsort = require('topsort');
+// import topsort = require('topsort');
 import {
   Widget
 } from 'phosphor-widget';
 import {
   IConstraint
 } from './constraints';
-
 import {
   IMenuItem
 } from './menu_item_interface';
 import {
   IMenuManager
 } from './menu_manager_interface';
+import {
+  partialSolve
+} from './functional_menu';
+import {
+  Menu, MenuBar, MenuItem
+} from 'phosphor-menus';
 
 /**
  * A class to solve the relationships between menu items
@@ -42,40 +46,25 @@ class MenuSolver {
    * at a time.
    *
    */
-  solve( ): Widget { // TODO : should return menubar
-    var allItems = this._registry.allMenuItems();
-
-    /**
-     * The logic inside solver is written in a very functional style.
-     * By the nature of graph/tree traversal, we need a recursive function
-     * therefore any 'global' state used will make it *very* difficult to debug.
-     * I strongly suggest following the functional paradigm as much as
-     * possible for this section of code.
-     */
-    var solver = (location: string[]) => {
-      var itemsAtLevel = this._getLevel( allItems, location );
-      var edges = this._formatConstraintsToEdges( itemsAtLevel );
-      //var sorted = topsort.topsort<string>(edges);
-      //return sorted;
-    }
+  solve(): MenuBar { 
 
     /**
      * The actual logic for iterating over the items, building the relevant
      * trees and forming a menu system.
      *
      * The very top level of a menu is a MenuBar, which contains menu items.
-     * Below this, everything is a menu item, either with 'text' and 'submenu',
-     * if it's not a leaf node, or 'text' and 'shortcut' if it is a leaf node.
+     * Below this, everything is a menu item, either with 'text' and 'submenu'
+     * (submenu contains a Menu() with a list of MenuItems) if it's not a leaf node, 
+     * or 'text' and 'shortcut' if it is a leaf node.
      * We therefore hard code the top level, and recursively search for the
      * rest.
      *
      */
-     /*var menubar = new Widget(); // TODO : should be MenuBar*/
-     var topLevel = solver([]);
-
-
-     /*return menubar;*/
-     return new Widget();
+     var allItems = this._registry.allMenuItems();
+     var topLevel = partialSolve(allItems, []);
+     var menubar = new MenuBar();
+     menubar.items = topLevel;
+     return menubar;
   }
 
   /**

@@ -7,92 +7,103 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
-/*import {
-  DockArea, DockMode, Tab, Widget,
-  Menu, MenuBar, MenuItem
-} from phosphor.widgets;*/
-
-import connect = phosphor.core.connect;
-import IMessage = phosphor.core.IMessage;
-import ResizeMessage = phosphor.widgets.ResizeMessage;
-import DockArea = phosphor.widgets.DockArea;
-import DockMode = phosphor.widgets.DockMode;
-import Tab = phosphor.widgets.Tab;
-import Widget = phosphor.widgets.Widget;
-import Menu = phosphor.widgets.Menu;
-import MenuBar = phosphor.widgets.MenuBar;
-import MenuItem = phosphor.widgets.MenuItem;
+import {
+  Message
+} from 'phosphor-messaging';
 
 import {
-  ICommand, ICommandManager, IMenuItem
-} from "../../../lib/index";
+  ResizeMessage, Widget, attachWidget
+} from 'phosphor-widget';
+
+import {
+  ISignal, Signal
+} from 'phosphor-signaling';
+
+import {
+  ICommand, IMenuItem, CommandManager, KeyboardManager,
+  MenuManager, MenuSolver
+} from '../../../lib/index';
+
+import {
+  Menu, MenuItem, MenuBar
+} from 'phosphor-menus';
+
+import {
+  Tab, TabPanel
+} from 'phosphor-tabs';
+
+import './index.css';
 
 
-class CommandRegistry implements ICommandManager {
-  constructor() {}
+var COMM = new CommandManager();
+var panel = new TabPanel();
 
-  registerCommand( command: ICommand ): boolean {
-    this._commandMap[ command.id ] = command;
-    this._addToNamespaces( command.id );
-    return true;
+
+var MENU = [
+  {
+    "location": ["New", "Code Panel"],
+    "command": "dock.new.codepanel",
+    "shortcut": ["Ctrl", "P"],
+    "short_desc": "Code Panel",
+    "long_desc": "Adds a new Dock item with a Codemirror widget."
+  },
+  {
+    "location": ["New", "Tester Panel"],
+    "command": "dock.new.testerpanel",
+    "shortcut": ["Ctrl", "T"]
+  },
+  {
+    "location": ["New", "Example", "One"],
+    "command": "example.namespace.one"
+  },
+  {
+    "location": ["New", "Example", "Two"],
+    "command": "example.namespace.two"
+  },
+  {
+    "location": ["Edit", "Undo"],
+    "command": "global.edit.undo"
+  },
+  {
+    "location": ["Edit", "Redo"],
+    "command": "global.edit.redo"
   }
+];
 
-  runCommand( id: string ): void {
-    var command = this._commandMap[id];
-    command.handler();
-  }
-
-  _addToNamespaces( id: string ): void {
-    id.split('.'); // TODO
-  }
-
-  private _commandMap: any = {};
-  private _namespaces: string[]; // TODO: should be a set, not array;
-
-}
-
-
-var COMM = new CommandRegistry();
-
-var dockarea = new DockArea();
-dockarea.tabOverlap = 1;
-
-var handler = {
-  newCodePanel: () => {
-    var panel = new CodeMirrorTab('Code');
-    dockarea.addWidget( panel, DockMode.Right );
-    dockarea.fit();
-    panel.fit();
-  }
-}
 
 var newCodePanelCommand = {
   id: "dock.new.codepanel",
   handler: () => {
-    var panel = new CodeMirrorTab('Code');
-    dockarea.addWidget( panel, DockMode.Right );
-    dockarea.fit();
-    panel.fit();
+    panel.addWidget(new CodeMirrorWidget('Code'));
   }
 }
 
-COMM.registerCommand( newCodePanelCommand );
+
+var newTesterPanelCommand = {
+  id: "dock.new.testerpanel",
+  handler: () => {
+    panel.addWidget(new CommandTesterTab());
+  }
+}
 
 
+COMM.registerCommand(newCodePanelCommand);
+COMM.registerCommand(newTesterPanelCommand);
 
 
 /**
  * CodeMirror widget - use from separate widgets directory, when avaiable
  */
-class CodeMirrorTab extends Widget {
+class CodeMirrorWidget extends Widget {
+
   constructor(title: string, config?: CodeMirror.EditorConfiguration) {
     super();
     this.addClass('content');
     this.addClass(title.toLowerCase());
-    this._tab = new Tab(title);
-    this._tab.closable = true;
-
     this._cm = CodeMirror( this.node, config );
+    var tab = new Tab(title);
+    tab.closable = true;
+    TabPanel.setTab(this, tab);
   }
 
   dispose(): void {
@@ -104,7 +115,7 @@ class CodeMirrorTab extends Widget {
     return this._cm;
   }
 
-  protected onAfterAttach( msg: IMessage ): void {
+  protected onAfterAttach(msg: Message): void {
     this._cm.refresh();
   }
 
@@ -112,75 +123,55 @@ class CodeMirrorTab extends Widget {
     this._cm.setSize( msg.width, msg.height );
   }
 
-  get tab(): Tab {
-    return this._tab;
-  }
-
-  private _tab: Tab;
   private _cm: CodeMirror.Editor;
 }
 
 
 /**
  * Command tester
- *
  */
 class CommandTesterTab extends Widget {
+
   constructor() {
     super();
-    this._tab = new Tab('Tester');
+    var tab = new Tab('Tester');
+    TabPanel.setTab(this, tab);
     var btn = document.createElement('input');
     btn.type = 'button';
     btn.name = 'newCodeButton';
     btn.value = "New Code Panel";
     btn.onclick = () => COMM.runCommand('dock.new.codepanel');
-    this.node.appendChild( btn );
+    this.node.appendChild(btn);
   }
-
-  get tab(): Tab {
-    return this._tab;
-  }
-
-  private _tab: Tab;
 }
-
-
-
-/**
- * Hard-coded menu item, for now.
- */
-var addCodeMirrorItem = new MenuItem({
-  text: "Code Panel",
-  shortcut: "Ctrl+Alt+N"
-});
-connect( addCodeMirrorItem, MenuItem.triggered, handler, handler.newCodePanel );
-
-
-var newItem = new MenuItem({
-  text: "New",
-  submenu: new Menu([
-    addCodeMirrorItem,
-  ]),
-});
 
 
 function main(): void {
 
+  var menuManager = new MenuManager(MENU);
+  //COMM.registerCommandInvoker(menuManager);
+
+  var keyManager = new KeyboardManager('mozilla');
+  COMM.registerCommandInvoker(keyManager);
+
+  keyManager.registerShortcutAdder(menuManager);
+  menuManager.registerShortcuts();
 
   var tester = new CommandTesterTab();
-  var initial = new CodeMirrorTab('Code');
-  dockarea.addWidget(initial);
-  dockarea.addWidget(tester);
-  dockarea.fit();
+  var initial = new CodeMirrorWidget('Code');
+  panel.addWidget(initial);
+  panel.addWidget(tester);
 
-  var menubar = new MenuBar([
-    newItem
-  ]);
+  var solver = new MenuSolver(menuManager);
+  var menubar = solver.solve();
+  menubar.id = 'menubar';
+  panel.id = 'main';
 
-  menubar.attach( document.getElementById('container') );
-  dockarea.attach( document.getElementById('main') );
+  attachWidget(menubar, document.body);
+  attachWidget(panel, document.body);
 
-  window.onresize = () => dockarea.fit();
+  window.onresize = () => panel.update();
 }
+
 
 window.onload = main;
