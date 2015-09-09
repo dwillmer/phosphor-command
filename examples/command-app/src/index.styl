@@ -1,82 +1,31 @@
 /*-----------------------------------------------------------------------------
-| Copyright (c) 2015, PhosphorJS Contributors
+| Copyright (c) 2014-2015, PhosphorJS Contributors
 |
 | Distributed under the terms of the BSD 3-Clause License.
 |
 | The full license is in the file LICENSE, distributed with this software.
 |----------------------------------------------------------------------------*/
 body {
+  font-family: sans-serif;
   margin: 0;
   padding: 0;
-  background: #F5F6F7;
+}
+
+
+#menubar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 
 #main {
   position: absolute;
-  overflow: hidden;
-  top: 30px;
+  top: 34px;
   left: 10px;
   right: 10px;
   bottom: 10px;
-}
-
-
-.CodeMirrorTab > .CodeMirror {
-  z-index: 0;
-}
-
-
-#container {
-  width: 100%;
-}
-
-
-#content {
-  padding-left: 10px;
-}
-
-
-.p-MenuBar {
-  position: static;
-  top: auto;
-  left: auto;
-  width: auto;
-  height: auto;
-  min-height: 24px;
-  padding-left: 5px;
-  background: #FAFAFA;
-  color: rgba(0, 0, 0, 0.87);
-  border-bottom: 1px solid #DDDDDD;
-  font: 13px Helvetica, Arial, sans-serif;
-}
-
-
-.p-MenuBar-item {
-  padding: 4px 8px;
-  border-left: 1px solid transparent;
-  border-right: 1px solid transparent;
-  &.p-mod-active {
-    background: #E5E5E5;
-  }
-  &.p-mod-disabled {
-    color: rgba(0, 0, 0, 0.26);
-  }
-  &.p-mod-active.p-mod-selected {
-    z-index: 1000000;
-    background: white;
-    border-left: 1px solid #C0C0C0;
-    border-right: 1px solid #C0C0C0;
-    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
-  }
-  &.p-mod-separator-type {
-    border-left: 1px solid #DDDDDD;
-  }
-}
-
-
-.p-MenuBar-menu {
-  transform: translateY(-1px);
 }
 
 
@@ -89,16 +38,18 @@ body {
 }
 
 
-.p-Menu-item {
-  &.p-mod-active {
-    background: #E5E5E5;
-  }
-  &.p-mod-disabled {
-    color: rgba(0, 0, 0, 0.26);
-  }
-  &.p-mod-separator-type > span::after {
-    border-top: 1px solid #DDDDDD;
-  }
+.p-Menu-item.p-mod-active {
+  background: #E5E5E5;
+}
+
+
+.p-Menu-item.p-mod-disabled {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+
+.p-Menu-item.p-mod-separator-type > span::after {
+  border-top: 1px solid #DDDDDD;
 }
 
 
@@ -148,9 +99,52 @@ body {
 }
 
 
-.p-DockPanel {
-  padding-right: 2px;
-  padding-bottom: 2px;
+.p-MenuBar {
+  min-height: 24px;
+  padding-left: 5px;
+  background: #FAFAFA;
+  color: rgba(0, 0, 0, 0.87);
+  border-bottom: 1px solid #DDDDDD;
+  font: 13px Helvetica, Arial, sans-serif;
+}
+
+
+.p-MenuBar-menu {
+  transform: translateY(-1px);
+}
+
+
+.p-MenuBar-item {
+  padding: 4px 8px;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+}
+
+
+.p-MenuBar-item.p-mod-active {
+  background: #E5E5E5;
+}
+
+
+.p-MenuBar-item.p-mod-disabled {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+
+.p-MenuBar-item.p-mod-separator-type {
+  margin: 2px;
+  padding: 0;
+  border: none;
+  border-left: 1px solid #DDDDDD;
+}
+
+
+.p-MenuBar.p-mod-active > .p-MenuBar-content > .p-MenuBar-item.p-mod-active {
+  z-index: 1000000;
+  background: white;
+  border-left: 1px solid #C0C0C0;
+  border-right: 1px solid #C0C0C0;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -161,25 +155,41 @@ body {
 
 .p-TabBar-content {
   bottom: 1px;
-  > .p-Tab {
-    font: 12px Helvetica, Arial, sans-serif;
-    height: 21px;
-    padding: 0px 10px;
-    background: #E5E5E5;
-    border: 1px solid #C0C0C0;
-    border-bottom: none;
-    &.p-mod-selected {
-      height: 24px;
-      background: white;
-      transform: translateY(1px);
-    }
-    &:hover:not(.p-mod-selected) {
-      background: #F0F0F0;
-    }
-    > span {
-      line-height: 21px;
-    }
-  }
+  align-items: flex-end;
+}
+
+
+.p-TabBar-content > .p-Tab {
+  flex-basis: 125px;
+  max-height: 21px;
+  margin-left: -1px;
+  border: 1px solid #C0C0C0;
+  border-bottom: none;
+  padding: 0px 10px;
+  background: #E5E5E5;
+  font: 12px Helvetica, Arial, sans-serif;
+}
+
+
+.p-TabBar-content > .p-Tab.p-mod-first {
+  margin-left: 0;
+}
+
+
+.p-TabBar-content > .p-Tab.p-mod-selected {
+  min-height: 24px;
+  background: white;
+  transform: translateY(1px);
+}
+
+
+.p-TabBar-content > .p-Tab:hover:not(.p-mod-selected) {
+  background: #F0F0F0;
+}
+
+
+.p-TabBar-content > .p-Tab > span {
+  line-height: 21px;
 }
 
 
@@ -190,44 +200,9 @@ body {
 }
 
 
-.p-Tab.p-mod-floating {
-  font: 12px Helvetica, Arial, sans-serif;
-  height: 24px;
-  padding: 0px 10px;
-  background: white;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-  > span {
-    line-height: 21px;
-  }
-}
-
-
-.p-Tab.p-mod-closable > .p-Tab-close-icon {
-  margin-left: 4px;
-  &:before {
-    content: '\f00d';
-    font-family: FontAwesome;
-  }
-}
-
-
-.p-DockPanel > .p-StackedPanel {
+.p-TabPanel > .p-StackedPanel {
   padding: 10px;
   background: white;
   border: 1px solid #C0C0C0;
   border-top: none;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-
-.p-DockPanel-overlay {
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(0, 0, 0, 0.6);
-}
-
-
-.content {
-  border: 1px solid black;
-  min-width: 50px;
-  min-height: 50px;
 }
