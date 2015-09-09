@@ -146,31 +146,6 @@ class CommandTesterTab extends Widget {
 }
 
 
-//
-// Demo test menu bar
-//
-//
-
-var undoItem = new MenuItem({
-  text: 'Undo'
-});
-
-var redoItem = new MenuItem({
-  text: 'Redo'
-});
-
-var editMenu = new Menu();
-editMenu.items = [
-  undoItem,
-  redoItem,
-];
-
-var editItem = new MenuItem({
-  text: 'Edit',
-  submenu: editMenu
-});
-
-
 function main(): void {
 
   var menuManager = new MenuManager(MENU);
@@ -188,14 +163,8 @@ function main(): void {
   panel.addWidget(tester);
 
   var solver = new MenuSolver(menuManager);
-  // var menubar = solver.solve();
-  var menubar = new MenuBar();
+  var menubar = solver.solve();
   menubar.id = 'menubar';
-
-  menubar.items = [
-    editItem,
-  ];
-
   panel.id = 'main';
 
   attachWidget(menubar, document.body);
