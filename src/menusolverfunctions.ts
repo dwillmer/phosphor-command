@@ -42,11 +42,14 @@ var buildItem = function(item: any) {
   });
 }
 
+/**
+ * Builds a phosphor submenu (an array of menu items inside a Menu object)
+ * from the items passed in and the text string for this MenuItem.
+ */
 var buildSubmenu = function(items: MenuItem[], text: string): MenuItem {
-  var menu_obj = new Menu();
-  menu_obj.items = items;
-  return MenuItem({ text: currentVal[preLen], submenu: menu_obj });
-
+  var menuObj = new Menu();
+  menuObj.items = items;
+  return new MenuItem({text: text, submenu: menuObj});
 }
 
 
@@ -110,7 +113,7 @@ var getConstraints = function(items: string[][], prefix: string[]): string[][] {
       // now we have an array of constraints, actually constrain them and
       // push them onto the constraints var above.
       cons.map( (c: any) => {
-          constraints.push(c.constrain( items[i]));
+          constraints.push(c.constrain(items[i]));
       });
     }
   }
@@ -126,10 +129,8 @@ var getConstraints = function(items: string[][], prefix: string[]): string[][] {
  *
  */
 export function partialSolve( items, prefix ): MenuItem[] {
-  console.log("Partial Solve - " + prefix.toString());
-  var menu_items = [];
+  var menuItems = [];
   var levelItems: string[][] = getItemsAtLevel(items, prefix);
-  console.log('got items at level: ' + levelItems.toString());
 
   // TODO : don't need to sort at every level, can just sort once at the top call
   sortItems(levelItems);
@@ -139,7 +140,6 @@ export function partialSolve( items, prefix ): MenuItem[] {
   var preLen = prefix.length;
 
   while(endIdx < levelItems.length) {
-    console.log('top while' + endIdx.toString());
     var currentVal = levelItems[startIdx];
     // This is the real centre of the menu solver - 
     // if the prefix passed in is one less than the location length, then this is a
@@ -151,26 +151,23 @@ export function partialSolve( items, prefix ): MenuItem[] {
     // we just append that to our current array.
     //
     if(levelItems[endIdx].length === preLen+1) {
-      console.log('first case: ' + levelItems[endIdx].toString());
-      menu_items.push(buildItem(levelItems[endIdx]));
+      menuItems.push(buildItem(levelItems[endIdx]));
       endIdx++;
       startIdx = endIdx;
     } else {
-      console.log('second case: ' + levelItems[endIdx].toString());
       // iterate over all the items at this level in the tree
       // take prefix length, use that as index into levelItems[endIdx]
       //
       var match = levelItems[endIdx][preLen];
       while(levelItems[endIdx] && levelItems[endIdx][preLen] === match) {
-        console.log('second while: ' + levelItems[endIdx].toString());
         endIdx++;
       }
       var subItems = levelItems.slice(startIdx, endIdx).map((val) => {
         return (<any>val).menuItem;
       });
       var submenu = partialSolve(subItems, currentVal.slice(0,preLen+1));
-      var menu_obj = buildSubmenu(submenu, currentVal[preLen]);
-      menu_items.push(item);
+      var menuObj = buildSubmenu(submenu, currentVal[preLen]);
+      menuItems.push(menuObj);
       startIdx = endIdx;
       endIdx++;
     }
@@ -181,7 +178,7 @@ export function partialSolve( items, prefix ): MenuItem[] {
   // *at this level or below*.
   //
   // var order = topsort.topsort<string>( getConstraints( levelItems ) );
-  return menu_items; // TODO .sortBasedOn( order );
+  return menuItems; // TODO .sortBasedOn( order );
 
 }
 

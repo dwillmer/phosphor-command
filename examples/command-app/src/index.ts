@@ -91,19 +91,6 @@ var MENU = [
     "location": ["File", "Close and Halt"],
     "command": "notebook.close_and_halt"
   },
-  {
-    "location": ["New", "Tester Panel"],
-    "command": "dock.new.testerpanel",
-    "shortcut": ["Ctrl", "T"]
-  },
-  {
-    "location": ["New", "Example", "One"],
-    "command": "example.namespace.one"
-  },
-  {
-    "location": ["New", "Example", "Two"],
-    "command": "example.namespace.two"
-  },
   // Edit
   //
   {
@@ -160,6 +147,45 @@ var MENU = [
     "location": ["View", "Toggle Toolbar"],
     "command": "global.view.toggle_toolbar"
   },
+  // Cell
+  //
+  {
+    "location": ["Cell", "Run"],
+    "command": "cell.run",
+  },
+  {
+    "location": ["Cell", "Run and Select Below"],
+    "command": "cell.run_select_below"
+  },
+  {
+    "location": ["Cell", "Run and Insert below"],
+    "command": "cell.run_insert_below"
+  },
+  {
+    "location": ["Cell", "Run All"],
+    "command": "cell.run_all"
+  },
+  {
+    "location": ["Cell", "Run All Above"],
+    "command": "cell.run_all_above"
+  },
+  {
+    "location": ["Cell", "Run All Below"],
+    "command": "cell.run_all_below"
+  },
+  {
+    "location": ["Cell", "Cell Type", "Code"],
+    "command": "cell.type.code"
+  },
+  {
+    "location": ["Cell", "Cell Type", "Markdown"],
+    "command": "cell.type.markdown"
+  },
+  {
+    "location": ["Cell", "Cell Type", "Raw NBConvert"],
+    "command": "cell.type.nbconvert"
+  },
+
   // Kernel
   //
   {
@@ -220,7 +246,7 @@ class CodeMirrorWidget extends Widget {
     super();
     this.addClass('content');
     this.addClass(title.toLowerCase());
-    this._cm = CodeMirror( this.node, config );
+    this._cm = CodeMirror(this.node, config);
     var tab = new Tab(title);
     tab.closable = true;
     TabPanel.setTab(this, tab);
@@ -240,7 +266,7 @@ class CodeMirrorWidget extends Widget {
   }
 
   protected onResize(msg: ResizeMessage): void {
-    this._cm.setSize( msg.width, msg.height );
+    this._cm.setSize(msg.width, msg.height);
   }
 
   private _cm: CodeMirror.Editor;

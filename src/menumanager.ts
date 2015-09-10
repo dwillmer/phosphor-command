@@ -50,8 +50,8 @@ export class MenuManager implements IMenuManager, IShortcutAdder {
 
   private _items: IMenuItem[] = [];
 
-  constructor(menu_items: IMenuItem[]) {
-    this._items = menu_items;
+  constructor(menuItems: IMenuItem[]) {
+    this._items = menuItems;
   }
 
   /**
@@ -76,7 +76,7 @@ export class MenuManager implements IMenuManager, IShortcutAdder {
    * adding and removing menu items at runtime.
    */
   registerShortcuts(): void {
-    for (var idx = 0; idx < this._items.length; ++i) {
+    for (var idx = 0; idx < this._items.length; ++idx) {
       if('shortcut' in this._items[idx]) {
         var item = this._items[idx];
         this.shortcutAdded.emit({
