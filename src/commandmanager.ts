@@ -87,6 +87,6 @@ class CommandManager implements ICommandManager {
   }
 
   private _commandMap: any = {};
-  private _namespaces: string[]; // TODO: should be a set, not array;
+  private _namespaces: string[] = []; // TODO: should be a set, not array;
 
 }

@@ -76,7 +76,7 @@ export class MenuManager implements IMenuManager, IShortcutAdder {
    * adding and removing menu items at runtime.
    */
   registerShortcuts(): void {
-    for(var idx in this._items) {
+    for (var idx = 0; idx < this._items.length; ++i) {
       if('shortcut' in this._items[idx]) {
         var item = this._items[idx];
         this.shortcutAdded.emit({

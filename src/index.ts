@@ -37,7 +37,6 @@
  * and (2) register with the required CommandManager (registerCommandInvoker).
  * 
  */
-
 export * from './commandinterface';
 export * from './commandinvokerinterface';
 export * from './commandmanager';

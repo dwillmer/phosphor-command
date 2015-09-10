@@ -15,7 +15,6 @@ import {
 	ICommandInvoker
 } from './commandinvokerinterface';
 
-
 /**
  * The command manager stores the existing registered commands, and
  * can present information about the current commands to other parts
@@ -28,7 +27,6 @@ import {
  */
 export
 interface ICommandManager {
-
 	/**
 	 * Registers a command with the manager, returns a boolean to confirm
 	 * it registered correctly. 
