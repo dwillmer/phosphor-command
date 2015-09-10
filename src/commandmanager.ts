@@ -8,14 +8,16 @@
 'use strict';
 
 import {
-  ICommandManager
-} from './command_manager_interface';
-import {
   ICommand
-} from './command_interface';
+} from './commandinterface';
+
 import {
-  ICommandInvoker
-} from './command_invoker_interface';
+ICommandInvoker
+} from './commandinvokerinterface';
+
+import {
+  ICommandManager
+} from './commandmanagerinterface';
 
 
 /**

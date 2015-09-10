@@ -8,21 +8,23 @@
 'use strict';
 
 // import topsort = require('topsort');
-import {
-  Widget
-} from 'phosphor-widget';
+
 import {
   IConstraint
 } from './constraints';
+
 import {
   IMenuItem
-} from './menu_item_interface';
+} from './menuiteminterface';
+
 import {
   IMenuManager
-} from './menu_manager_interface';
+} from './menumanagerinterface';
+
 import {
   partialSolve
-} from './functional_menu';
+} from './menusolverfunctions';
+
 import {
   Menu, MenuBar, MenuItem
 } from 'phosphor-menus';

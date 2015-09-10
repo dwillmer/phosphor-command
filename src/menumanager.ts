@@ -9,16 +9,20 @@
 
 import {
   IKeySequence
-} from './key_sequence_interface';
+} from './keysequenceinterface';
+
+import {
+IMenuItem
+} from './menuiteminterface';
+
 import {
   IMenuManager
-} from './menu_manager_interface';
-import {
-  IMenuItem
-} from './menu_item_interface';
+} from './menumanagerinterface';
+
 import {
   IShortcutAdder
-} from './shortcut_adder_interface';
+} from './shortcutadderinterface';
+
 import {
   Signal, ISignal
 } from 'phosphor-signaling';

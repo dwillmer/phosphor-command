@@ -7,36 +7,19 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
-/**
- *
- * DISCLAIMER: this is work-in-progress, a mixture of many ideas,
- * and should definitely *not* be used.
- *
- */
-
-/*require('../support/lambdajs/utils').expose(global);
-require('../support/lambdajs/lambda').expose();
-require('lenses').expose('global');
-var curry = require('lodash.curry');
-var Maybe = require('pointfree-fantasy/instances/maybe');
-var Promise = require('../support/promise');*/
-
-/*require('./pointfree-fantasy').expose(global); // or if browser pointfree.expose(window)
-var Maybe = require('./pointfree-fantasy/instances/maybe');*/
-
 // import topsort = require('topsort');
-import {Before, After} from './constraints';
+import {
+  Before, After
+} from './constraints';
+
 import {
   IMenuItem
-} from './menu_item_interface';
+} from './menuiteminterface';
+
 import {
   Menu, MenuBar, MenuItem
 } from 'phosphor-menus';
 
-
-/**
- * Components
- */
 
 /**
  * Takes an item and returns the location with the item attached as 'menuItem'

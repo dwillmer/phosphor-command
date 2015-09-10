@@ -8,24 +8,29 @@
 'use strict';
 
 import {
-  IKeyboardManager
-} from './keyboard_manager_interface';
-import {
-  IKeySequence
-} from './key_sequence_interface';
-import {
   ICommandInvoker
-} from './command_invoker_interface';
-import {
-  IMenuManager
-} from './menu_manager_interface';
-import {
-  IShortcutAdder
-} from './shortcut_adder_interface';
+} from './commandinvokerinterface';
 
 import {
-  Signal, ISignal
+  IKeySequence
+} from './keysequenceinterface';
+
+import {
+  IKeyboardManager
+} from './keyboardmanagerinterface';
+
+import {
+  IMenuManager
+} from './menumanagerinterface';
+
+import {
+Signal, ISignal
 } from 'phosphor-signaling';
+
+import {
+  IShortcutAdder
+} from './shortcutadderinterface';
+
 
 var MOZILLA_MODIFIERS = { '; :': 59, '= +': 61, '- _': 173, 'meta': 224, 'minus': 173 };
 var IE_MODIFIERS = { '; :': 186, '= +': 187, '- _': 189, 'minus': 189 };

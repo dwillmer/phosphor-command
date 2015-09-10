@@ -9,14 +9,15 @@
 
 import {
   IMenuItem
-} from './menu_item_interface';
+} from './menuiteminterface';
+
+import {
+  MenuManager
+} from './menumanager';
+
 import {
   ISignal
 } from 'phosphor-signaling';
-import {
-  MenuManager
-} from './menu_manager';
-
 
 /**
  * The MenuManager stores the existing registered menu names, and presents

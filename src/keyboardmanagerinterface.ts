@@ -9,14 +9,15 @@
 
 import {
   IKeySequence
-} from './key_sequence_interface';
+} from './keysequenceinterface';
+
 import {
   IMenuManager
-} from './menu_manager_interface';
+} from './menumanagerinterface';
+
 import {
   IShortcutAdder
-} from './shortcut_adder_interface';
-
+} from './shortcutadderinterface';
 
 /**
  * A keyboard manager stores all permutations of registered keyboard inputs

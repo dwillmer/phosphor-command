@@ -9,10 +9,11 @@
 
 import {
 	ICommand
-} from './command_interface';
+} from './commandinterface';
+
 import {
 	ICommandInvoker
-} from './command_invoker_interface';
+} from './commandinvokerinterface';
 
 
 /**
