@@ -8,8 +8,8 @@
 'use strict';
 
 import {
-  IKeyPerm
-} from './key_perm_interface';
+  IKeySequence
+} from './key_sequence_interface';
 import {
   IMenuManager
 } from './menu_manager_interface';
@@ -42,7 +42,7 @@ export class MenuManager implements IMenuManager, IShortcutAdder {
    * key permutations when they connect to this signal using the
    * shortcutAdded property below.
    */
-  static shortcutAddedSignal = new Signal<MenuManager, IKeyPerm>();
+  static shortcutAddedSignal = new Signal<MenuManager, IKeySequence>();
 
   private _items: IMenuItem[] = [];
 
@@ -83,7 +83,7 @@ export class MenuManager implements IMenuManager, IShortcutAdder {
     }
   }
 
-  get shortcutAdded(): ISignal<MenuManager, IKeyPerm> {
+  get shortcutAdded(): ISignal<MenuManager, IKeySequence> {
     return MenuManager.shortcutAddedSignal.bind(this);
   }
 

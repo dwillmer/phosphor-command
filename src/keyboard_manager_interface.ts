@@ -8,8 +8,8 @@
 'use strict';
 
 import {
-  IKeyPerm
-} from './key_perm_interface';
+  IKeySequence
+} from './key_sequence_interface';
 import {
   IMenuManager
 } from './menu_manager_interface';
@@ -30,14 +30,14 @@ export
 interface IKeyboardManager {
 
   /**
-   * Registers an IKeyPerm with the manager, returns a boolean to confirm
+   * Registers an IKeySequence with the manager, returns a boolean to confirm
    * it registered correctly. 
    *
    * A false could indicate that the key permutation is already 
    * registered - we could perhaps do with a more nuanced 
    * approach to failure here, rather than just using a boolean.
    */
-  registerInput(key: IKeyPerm): boolean;
+  registerInput(key: IKeySequence): boolean;
   
   /**
    * Enables an already registered key permutation given by the input string.

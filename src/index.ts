@@ -43,7 +43,7 @@ export * from './command_invoker_interface';
 export * from './command_manager';
 export * from './command_manager_interface';
 export * from './constraints';
-export * from './key_perm_interface';
+export * from './key_sequence_interface';
 export * from './keyboard_manager';
 export * from './keyboard_manager_interface';
 export * from './menu_item_interface';

@@ -41,11 +41,55 @@ var panel = new TabPanel();
 
 var MENU = [
   {
-    "location": ["New", "Code Panel"],
+    "location": ["File", "New Notebook", "Python 3"],
     "command": "dock.new.codepanel",
     "shortcut": ["Ctrl", "P"],
     "short_desc": "Code Panel",
     "long_desc": "Adds a new Dock item with a Codemirror widget."
+  },
+  {
+    "location": ["File", "New Notebook", "Julia"],
+    "command": "notebook.new.julia"
+  },
+  {
+    "location": ["File", "Open..."],
+    "command": "notebook.open",
+  },
+  {
+    "location": ["File", "Make a copy..."],
+    "command": "notebook.copy"
+  },
+  {
+    "location": ["File", "Rename..."],
+    "command": "notebook.rename"
+  },
+  {
+    "location": ["File", "Save and checkpoint"],
+    "command": "notebook.checkpoint.save"
+  },
+  {
+    "location": ["File", "Revert to Checkpoint"],
+    "command": "notebook.checkpoint.revert.<timestamp>"
+  },
+  {
+    "location": ["File", "Print Preview"],
+    "command": "notebook.print.preview"
+  },
+  {
+    "location": ["File", "Download as", "IPython notebook"],
+    "command": "notebook.download.as_ipynb"
+  },
+  {
+    "location": ["File", "Download as", "PDF"],
+    "command": "notebook.download.as_pdf"
+  },
+  {
+    "location": ["File", "Trusted Notebook"],
+    "command": "notebook.trusted"
+  },
+  {
+    "location": ["File", "Close and Halt"],
+    "command": "notebook.close_and_halt"
   },
   {
     "location": ["New", "Tester Panel"],
@@ -60,14 +104,90 @@ var MENU = [
     "location": ["New", "Example", "Two"],
     "command": "example.namespace.two"
   },
+  // Edit
+  //
   {
-    "location": ["Edit", "Undo"],
-    "command": "global.edit.undo"
+    "location": ["Edit", "Cut Cell"],
+    "command": "global.edit.cut_cell"
   },
   {
-    "location": ["Edit", "Redo"],
-    "command": "global.edit.redo"
-  }
+    "location": ["Edit", "Copy Cell"],
+    "command": "global.edit.copy_cell"
+  },
+  {
+    "location": ["Edit", "Paste Cell Above"],
+    "command": "global.edit.paste_cell_above"
+  },
+  {
+    "location": ["Edit", "Paste Cell Below"],
+    "command": "global.edit.paste_cell_below"
+  },
+  {
+    "location": ["Edit", "Paste Cell & Replace"],
+    "command": "global.edit.paste_cell_replace"
+  },
+  {
+    "location": ["Edit", "Spit Cell"],
+    "command": "global.edit.split_cell"
+  },
+  {
+    "location": ["Edit", "Merge Cell Above"],
+    "command": "global.edit.merge_cell_above"
+  },
+  {
+    "location": ["Edit", "Merge Cell Below"],
+    "command": "global.edit.merge_cell_below"
+  },
+  {
+    "location": ["Edit", "Move Cell Up"],
+    "command": "global.edit.move_cell_up"
+  },
+  {
+    "location": ["Edit", "Move Cell Down"],
+    "command": "global.edit.move_cell_down"
+  },
+  {
+    "location": ["Edit", "Edit Notebook Metadata"],
+    "command": "global.edit.edit_metadata"
+  },
+  // View
+  //
+  {
+    "location": ["View", "Toggle Header"],
+    "command": "global.view.toggle_header"
+  },
+  {
+    "location": ["View", "Toggle Toolbar"],
+    "command": "global.view.toggle_toolbar"
+  },
+  // Kernel
+  //
+  {
+    "location": ["Kernel", "Interrupt"],
+    "command": "global.kernel.interrupt"
+  },
+  {
+    "location": ["Kernel", "Restart"],
+    "command": "global.kernel.restart"
+  },
+  {
+    "location": ["Kernel", "Reconnect"],
+    "command": "global.kernel.reconnect"
+  },
+  {
+    "location": ["Kernel", "Change kernel", "Python 3"],
+    "command": "global.kernel.change.python_3"
+  },
+  {
+    "location": ["Kernel", "Change kernel", "Julia"],
+    "command": "global.kernel.change.julia"
+  },
+  // Help
+  //
+  {
+    "location": ["Help", "User Interface Tour"],
+    "command": "global.help.ui_tour"
+  },
 ];
 
 

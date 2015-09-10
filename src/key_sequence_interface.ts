@@ -15,7 +15,7 @@
  * support emacs/vi-style user commands, and therefore need
  * to differentiate between key orderings.
  *
- * In a number of common cases, instances conforming to IKeyPerm
+ * In a number of common cases, instances conforming to IKeySequence
  * will be created by the MenuManager, ie. when shortcuts are declared in
  * the menu items.
  *
@@ -24,11 +24,11 @@
  * be changed based on program execution (eg. context menus), and we may
  * still want other non-menu key combinations to work.
  *
- * In these cases, you canregister an IKeyPerm-conforming object with a keyboard
+ * In these cases, you canregister an IKeySequence-conforming object with a keyboard
  * manager, and not through a menu manager.
  */
 export
-interface IKeyPerm {
+interface IKeySequence {
   
   /**
    * A string representing the specific user input that should trigger the

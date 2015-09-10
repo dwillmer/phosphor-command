@@ -11,8 +11,8 @@ import {
   IKeyboardManager
 } from './keyboard_manager_interface';
 import {
-  IKeyPerm
-} from './key_perm_interface';
+  IKeySequence
+} from './key_sequence_interface';
 import {
   ICommandInvoker
 } from './command_invoker_interface';
@@ -124,7 +124,7 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
    * This is part of the IKeyboardManager interface.
    *
    */
-  registerInput(key: IKeyPerm): boolean {
+  registerInput(key: IKeySequence): boolean {
     if(key.input in this._key_perms) {
       return false;
     }
@@ -188,7 +188,7 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
    * TODO!
    *
    */
-  private _registerInputFromSignal(sender: IShortcutAdder, value: IKeyPerm): void {
+  private _registerInputFromSignal(sender: IShortcutAdder, value: IKeySequence): void {
     console.log('Registered: ' + value.toString());
     this.registerInput(value);
   }
@@ -218,12 +218,12 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
       var isShift = <boolean>(event.shiftKey);
       var keyStr = that._getKey(key);
 
-      var keyPerm = [];
-      if (isCtrl) { keyPerm.push('ctrl'); }
-      if (isAlt) { keyPerm.push('alt'); }
-      if (isShift) { keyPerm.push('shift'); }
-      keyPerm.push(keyStr);
-      var joinedKey = keyPerm.join('-');
+      var keySeq = [];
+      if (isCtrl) { keySeq.push('ctrl'); }
+      if (isAlt) { keySeq.push('alt'); }
+      if (isShift) { keySeq.push('shift'); }
+      keySeq.push(keyStr);
+      var joinedKey = keySeq.join('-');
       console.log(joinedKey);
 
       if(joinedKey in that._key_perms) {
