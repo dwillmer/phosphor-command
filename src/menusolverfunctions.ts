@@ -7,36 +7,19 @@
 |----------------------------------------------------------------------------*/
 'use strict';
 
-/**
- *
- * DISCLAIMER: this is work-in-progress, a mixture of many ideas,
- * and should definitely *not* be used.
- *
- */
-
-/*require('../support/lambdajs/utils').expose(global);
-require('../support/lambdajs/lambda').expose();
-require('lenses').expose('global');
-var curry = require('lodash.curry');
-var Maybe = require('pointfree-fantasy/instances/maybe');
-var Promise = require('../support/promise');*/
-
-/*require('./pointfree-fantasy').expose(global); // or if browser pointfree.expose(window)
-var Maybe = require('./pointfree-fantasy/instances/maybe');*/
-
 // import topsort = require('topsort');
-import {Before, After} from './constraints';
+import {
+  Before, After
+} from './constraints';
+
 import {
   IMenuItem
-} from './menu_item_interface';
+} from './menuiteminterface';
+
 import {
   Menu, MenuBar, MenuItem
 } from 'phosphor-menus';
 
-
-/**
- * Components
- */
 
 /**
  * Takes an item and returns the location with the item attached as 'menuItem'
@@ -47,6 +30,11 @@ var itemTranspose = (item: any) => {
   return ret;
 }
 
+/**
+ * Takes a transposed IMenuItem and builds a phosphor MenuItem object for 
+ * direct use in the menus.
+ *
+ */
 var buildItem = function(item: any) {
   return new MenuItem({
     text: item[item.length-1],
@@ -54,35 +42,61 @@ var buildItem = function(item: any) {
   });
 }
 
-var sortItems = (obj: any[]) => { obj.sort(); return obj; };
+/**
+ * Builds a phosphor submenu (an array of menu items inside a Menu object)
+ * from the items passed in and the text string for this MenuItem.
+ */
+var buildSubmenu = function(items: MenuItem[], text: string): MenuItem {
+  var menuObj = new Menu();
+  menuObj.items = items;
+  return new MenuItem({text: text, submenu: menuObj});
+}
 
+
+var sortItems = (obj: any[]) => {obj.sort(); return obj;};
+
+/**
+ * 
+ * #### Notes
+ * TODO : This currently iterates over the items array twice, once for the map
+ * and once for the filter. Would be nice to reduce this to a single iteration
+ * without obscuring what's actually going on.
+ */
 var getItemsAtLevel = function( items: IMenuItem[], level: string[] ): string[][] {
   var num = level.length;
   return items
     .map( function(val) {
       // TODO : fix the toString()'s below - only required for array equality.
-      if( (val.location.length > num) && (val.location.slice(0,num).toString() === level.toString()) ) {
-        var ret = val.location;
-        (<any>ret).menuItem = val;
-        return <string[]>ret;
+      var vloc = val.location;
+      if((vloc.length > num) && (vloc.slice(0,num).toString() === level.toString())) {
+        (<any>vloc).menuItem = val;
+        return <string[]>vloc;
       }
     })
-    .filter( (val) => val !== undefined );
+    .filter((val) => val !== undefined);
 }
 
+/**
+ * Tests whether the initial values in the given item match the ones in 
+ * the prefix argument. Essentially 'is this menu item in this part of the
+ * tree'.
+ *
+ */
 var matchesPrefix = function(prefix: string[], item: string[]): boolean {
-  if( item.length >= prefix.length && item.slice(0,prefix.length) == prefix ) {
-    return true;
-  }
-  return false;
+  return item.length >= prefix.length && item.slice(0, prefix.length) === prefix;
 }
 
+/**
+ * TODO!
+ *
+ */
 var itemForConstraint = function(prefix: string[], item: string[]): string {
   return item.slice(prefix.length-1,prefix.length)[0];
 }
 
 /**
- * given a level such as
+ * Returns the constraints as an unordered array of directed edges for the objects
+ * in the level of the tree at 'prefix', for every item in 'items'.
  *
  */
 var getConstraints = function(items: string[][], prefix: string[]): string[][] {
@@ -99,7 +113,7 @@ var getConstraints = function(items: string[][], prefix: string[]): string[][] {
       // now we have an array of constraints, actually constrain them and
       // push them onto the constraints var above.
       cons.map( (c: any) => {
-          constraints.push( c.constrain( items[i] ) );
+          constraints.push(c.constrain(items[i]));
       });
     }
   }
@@ -109,25 +123,23 @@ var getConstraints = function(items: string[][], prefix: string[]): string[][] {
 /*var sortBasedOn*/
 
 /**
- * Takes a list of IMenuItems and a prefix, and returns
- *
+ * Takes a list of IMenuItems and a prefix, and returns fully formed
+ * menu for all objects below that tree level.
+ * 
  *
  */
 export function partialSolve( items, prefix ): MenuItem[] {
-  console.log("Partial Solve - " + prefix.toString());
-  var menu_items = [];
-  var levelItems: string[][] = getItemsAtLevel( items, prefix );
-  console.log('got items at level: ' + levelItems.toString());
+  var menuItems = [];
+  var levelItems: string[][] = getItemsAtLevel(items, prefix);
 
   // TODO : don't need to sort at every level, can just sort once at the top call
-  sortItems( levelItems );
+  sortItems(levelItems);
 
   var startIdx = 0;
   var endIdx = 0;
   var preLen = prefix.length;
 
-  while( endIdx < levelItems.length ) {
-    console.log('top while' + endIdx.toString());
+  while(endIdx < levelItems.length) {
     var currentVal = levelItems[startIdx];
     // This is the real centre of the menu solver - 
     // if the prefix passed in is one less than the location length, then this is a
@@ -138,39 +150,36 @@ export function partialSolve( items, prefix ): MenuItem[] {
     // That partialSolve clearly returns a built menu with the items at that level, so
     // we just append that to our current array.
     //
-    if( levelItems[endIdx].length === preLen+1 ) {
-      console.log('first case: ' + levelItems[endIdx].toString());
-      menu_items.push(buildItem(levelItems[endIdx]));
+    if(levelItems[endIdx].length === preLen+1) {
+      menuItems.push(buildItem(levelItems[endIdx]));
       endIdx++;
       startIdx = endIdx;
     } else {
-      console.log('second case: ' + levelItems[endIdx].toString());
       // iterate over all the items at this level in the tree
       // take prefix length, use that as index into levelItems[endIdx]
       //
       var match = levelItems[endIdx][preLen];
       while(levelItems[endIdx] && levelItems[endIdx][preLen] === match) {
-        console.log('second while: ' + levelItems[endIdx].toString());
         endIdx++;
       }
       var subItems = levelItems.slice(startIdx, endIdx).map((val) => {
         return (<any>val).menuItem;
       });
       var submenu = partialSolve(subItems, currentVal.slice(0,preLen+1));
-      var menu_obj = new Menu();
-      menu_obj.items = submenu;
-      var item = new MenuItem({text: currentVal[preLen], submenu: menu_obj});
-      menu_items.push( item );
+      var menuObj = buildSubmenu(submenu, currentVal[preLen]);
+      menuItems.push(menuObj);
       startIdx = endIdx;
       endIdx++;
     }
   }
 
+  // At this point we have a fully formed menu for the 'prefix' level in the tree.
+  // All we do now is sort based on the constraints given for all menu items 
+  // *at this level or below*.
+  //
   // var order = topsort.topsort<string>( getConstraints( levelItems ) );
-  return menu_items; // TODO .sortBasedOn( order );
+  return menuItems; // TODO .sortBasedOn( order );
 
 }
 
-// var my_array = partialSolve( test_array, [] );
-// console.log(my_array);
 

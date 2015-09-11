@@ -8,15 +8,16 @@
 'use strict';
 
 import {
-  IKeyPerm
-} from './key_perm_interface';
+  IKeySequence
+} from './keysequenceinterface';
+
 import {
   IMenuManager
-} from './menu_manager_interface';
+} from './menumanagerinterface';
+
 import {
   IShortcutAdder
-} from './shortcut_adder_interface';
-
+} from './shortcutadderinterface';
 
 /**
  * A keyboard manager stores all permutations of registered keyboard inputs
@@ -30,14 +31,14 @@ export
 interface IKeyboardManager {
 
   /**
-   * Registers an IKeyPerm with the manager, returns a boolean to confirm
+   * Registers an IKeySequence with the manager, returns a boolean to confirm
    * it registered correctly. 
    *
    * A false could indicate that the key permutation is already 
    * registered - we could perhaps do with a more nuanced 
    * approach to failure here, rather than just using a boolean.
    */
-  registerInput(key: IKeyPerm): boolean;
+  registerInput(key: IKeySequence): boolean;
   
   /**
    * Enables an already registered key permutation given by the input string.

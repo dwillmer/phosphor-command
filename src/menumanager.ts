@@ -8,17 +8,21 @@
 'use strict';
 
 import {
-  IKeyPerm
-} from './key_perm_interface';
+  IKeySequence
+} from './keysequenceinterface';
+
+import {
+IMenuItem
+} from './menuiteminterface';
+
 import {
   IMenuManager
-} from './menu_manager_interface';
-import {
-  IMenuItem
-} from './menu_item_interface';
+} from './menumanagerinterface';
+
 import {
   IShortcutAdder
-} from './shortcut_adder_interface';
+} from './shortcutadderinterface';
+
 import {
   Signal, ISignal
 } from 'phosphor-signaling';
@@ -42,12 +46,12 @@ export class MenuManager implements IMenuManager, IShortcutAdder {
    * key permutations when they connect to this signal using the
    * shortcutAdded property below.
    */
-  static shortcutAddedSignal = new Signal<MenuManager, IKeyPerm>();
+  static shortcutAddedSignal = new Signal<MenuManager, IKeySequence>();
 
   private _items: IMenuItem[] = [];
 
-  constructor(menu_items: IMenuItem[]) {
-    this._items = menu_items;
+  constructor(menuItems: IMenuItem[]) {
+    this._items = menuItems;
   }
 
   /**
@@ -72,7 +76,7 @@ export class MenuManager implements IMenuManager, IShortcutAdder {
    * adding and removing menu items at runtime.
    */
   registerShortcuts(): void {
-    for(var idx in this._items) {
+    for (var idx = 0; idx < this._items.length; ++idx) {
       if('shortcut' in this._items[idx]) {
         var item = this._items[idx];
         this.shortcutAdded.emit({
@@ -83,7 +87,7 @@ export class MenuManager implements IMenuManager, IShortcutAdder {
     }
   }
 
-  get shortcutAdded(): ISignal<MenuManager, IKeyPerm> {
+  get shortcutAdded(): ISignal<MenuManager, IKeySequence> {
     return MenuManager.shortcutAddedSignal.bind(this);
   }
 

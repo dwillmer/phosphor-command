@@ -8,27 +8,32 @@
 'use strict';
 
 import {
-  IKeyboardManager
-} from './keyboard_manager_interface';
-import {
-  IKeyPerm
-} from './key_perm_interface';
-import {
   ICommandInvoker
-} from './command_invoker_interface';
+} from './commandinvokerinterface';
+
+import {
+  IKeySequence
+} from './keysequenceinterface';
+
+import {
+  IKeyboardManager
+} from './keyboardmanagerinterface';
+
 import {
   IMenuManager
-} from './menu_manager_interface';
-import {
-  IShortcutAdder
-} from './shortcut_adder_interface';
+} from './menumanagerinterface';
 
 import {
-  Signal, ISignal
+Signal, ISignal
 } from 'phosphor-signaling';
 
-var MOZILLA_MODIFIERS = { '; :': 59, '= +': 61, '- _': 173, 'meta': 224, 'minus': 173 };
-var IE_MODIFIERS = { '; :': 186, '= +': 187, '- _': 189, 'minus': 189 };
+import {
+  IShortcutAdder
+} from './shortcutadderinterface';
+
+
+var MOZILLA_MODIFIERS = {'; :': 59, '= +': 61, '- _': 173, 'meta': 224, 'minus': 173 };
+var IE_MODIFIERS = {'; :': 186, '= +': 187, '- _': 189, 'minus': 189 };
 
 
 /**
@@ -42,7 +47,6 @@ var IE_MODIFIERS = { '; :': 186, '= +': 187, '- _': 189, 'minus': 189 };
  */
 export
 class KeyboardManager implements IKeyboardManager, ICommandInvoker {
-
   /**
    * A signal used to indicate to other parts of the application that the
    * critera have been met for a command to be invoked.
@@ -91,20 +95,19 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
    *
    * Prefer composition to inheritance here.
    */
-  protected _keycode_modifications: any = {};
+  protected _keycodeModifications: any = {};
 
-  private _key_perms: any = {};
+  private _keySequences: any = {};
   private _disabled: string[] = [];
-
 
   constructor(keycodes?: any) {
 
     if (keycodes === 'mozilla') {
-      this._keycode_modifications = MOZILLA_MODIFIERS;
+      this._keycodeModifications = MOZILLA_MODIFIERS;
     } else if (keycodes === 'ie') {
-      this._keycode_modifications = IE_MODIFIERS;
+      this._keycodeModifications = IE_MODIFIERS;
     } else if (keycodes !== undefined) {
-      this._keycode_modifications = keycodes;
+      this._keycodeModifications = keycodes;
     }
 
     this._bindEvents();
@@ -124,11 +127,11 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
    * This is part of the IKeyboardManager interface.
    *
    */
-  registerInput(key: IKeyPerm): boolean {
-    if(key.input in this._key_perms) {
+  registerInput(key: IKeySequence): boolean {
+    if(key.input in this._keySequences) {
       return false;
     }
-    this._key_perms[key.input] = key.command;
+    this._keySequences[key.input] = key.command;
     return true;
   }
 
@@ -151,7 +154,7 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
    * This is part of the IKeyboardManager interface.
    */
   disable(key: string): boolean {
-    if(key in this._key_perms && !(key in this._disabled)) {
+    if(key in this._keySequences && !(key in this._disabled)) {
       this._disabled.push(key);
       return true;
     }
@@ -164,8 +167,8 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
    * This is part of the IKeyboardManager interface.
    */
   unregister(key: string): boolean {
-    if(key in this._key_perms) {
-      delete this._key_perms[key];
+    if(key in this._keySequences) {
+      delete this._keySequences[key];
       if(key in this._disabled) {
         delete this._disabled[key];
       }
@@ -188,7 +191,7 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
    * TODO!
    *
    */
-  private _registerInputFromSignal(sender: IShortcutAdder, value: IKeyPerm): void {
+  private _registerInputFromSignal(sender: IShortcutAdder, value: IKeySequence): void {
     console.log('Registered: ' + value.toString());
     this.registerInput(value);
   }
@@ -201,8 +204,8 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
    * there's custom modifications, in which case those are stored per instance.
    */
   private _getKey(code: number): string {
-    if (code in this._keycode_modifications) {
-      return this._keycode_modifications[code];
+    if(code in this._keycodeModifications) {
+      return this._keycodeModifications[code];
     } else if (code in KeyboardManager.keycodes) {
       return KeyboardManager.keycodes[code];
     }
@@ -218,16 +221,19 @@ class KeyboardManager implements IKeyboardManager, ICommandInvoker {
       var isShift = <boolean>(event.shiftKey);
       var keyStr = that._getKey(key);
 
-      var keyPerm = [];
-      if (isCtrl) { keyPerm.push('ctrl'); }
-      if (isAlt) { keyPerm.push('alt'); }
-      if (isShift) { keyPerm.push('shift'); }
-      keyPerm.push(keyStr);
-      var joinedKey = keyPerm.join('-');
+      var keySeq = [];
+      // TODO : This means that required keyboard shortcuts 
+      // are order dependent in the definition
+      //
+      if (isCtrl) { keySeq.push('ctrl'); }
+      if (isAlt) { keySeq.push('alt'); }
+      if (isShift) { keySeq.push('shift'); }
+      keySeq.push(keyStr);
+      var joinedKey = keySeq.join('-');
       console.log(joinedKey);
 
-      if(joinedKey in that._key_perms) {
-        var command = that._key_perms[joinedKey];
+      if(joinedKey in that._keySequences) {
+        var command = that._keySequences[joinedKey];
         console.log('Command found: ' + command);
         that.invokeCommand.emit(command);
       }

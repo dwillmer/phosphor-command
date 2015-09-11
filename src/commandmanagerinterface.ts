@@ -9,11 +9,11 @@
 
 import {
 	ICommand
-} from './command_interface';
+} from './commandinterface';
+
 import {
 	ICommandInvoker
-} from './command_invoker_interface';
-
+} from './commandinvokerinterface';
 
 /**
  * The command manager stores the existing registered commands, and
@@ -27,7 +27,6 @@ import {
  */
 export
 interface ICommandManager {
-
 	/**
 	 * Registers a command with the manager, returns a boolean to confirm
 	 * it registered correctly. 

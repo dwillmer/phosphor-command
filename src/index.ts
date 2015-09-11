@@ -37,20 +37,19 @@
  * and (2) register with the required CommandManager (registerCommandInvoker).
  * 
  */
-
-export * from './command_interface';
-export * from './command_invoker_interface';
-export * from './command_manager';
-export * from './command_manager_interface';
+export * from './commandinterface';
+export * from './commandinvokerinterface';
+export * from './commandmanager';
+export * from './commandmanagerinterface';
 export * from './constraints';
-export * from './key_perm_interface';
-export * from './keyboard_manager';
-export * from './keyboard_manager_interface';
-export * from './menu_item_interface';
-export * from './menu_manager';
-export * from './menu_manager_interface';
-export * from './menu_solver';
-export * from './shortcut_adder_interface';
+export * from './keysequenceinterface';
+export * from './keyboardmanager';
+export * from './keyboardmanagerinterface';
+export * from './menuiteminterface';
+export * from './menumanager';
+export * from './menumanagerinterface';
+export * from './menusolver';
+export * from './shortcutadderinterface';
 
 
 
